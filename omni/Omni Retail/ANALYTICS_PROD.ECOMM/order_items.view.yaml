@@ -6,57 +6,234 @@ table_name: ORDER_ITEMS
 dimensions:
   id:
     sql: '"ID"'
+    label: Order Item ID
     format: ID
+    description: Unique identifier for a single line item within an order.
     primary_key: true
 
   order_id:
     sql: '"ORDER_ID"'
+    label: Order ID
     format: ID
+    description: Identifier of the order this line item belongs to. One order can
+      contain multiple line items.
+    synonyms: [ order number, order ]
 
   user_id:
     sql: '"USER_ID"'
+    label: Customer ID
     format: ID
+    description: Identifier of the customer who placed this order.
 
   inventory_item_id:
     sql: '"INVENTORY_ITEM_ID"'
+    label: Inventory Item ID
     format: ID
+    description: Identifier of the specific inventory unit sold; links to products
+      via the inventory_items bridge.
 
   sale_price:
     sql: '"SALE_PRICE"'
+    label: Sale Price
+    format: currency_2
+    description: Actual price the customer paid for this line item.
+    synonyms: [ price, item price ]
 
   status:
     sql: '"STATUS"'
+    label: Order Item Status
+    description: Fulfillment status of the line item (e.g. Complete, Shipped,
+      Processing, Cancelled, Returned).
+    synonyms: [ state ]
 
   created_at:
     sql: '"CREATED_AT"'
+    label: Order Created Date
+    description: Timestamp when the order line item was placed.
+    synonyms: [ order date, purchase date ]
 
   returned_at:
     sql: '"RETURNED_AT"'
+    label: Returned At
+    description: Timestamp when the item was returned, if applicable.
 
   shipped_at:
     sql: '"SHIPPED_AT"'
+    label: Shipped At
+    description: Timestamp when the item shipped, if applicable.
 
   delivered_at:
     sql: '"DELIVERED_AT"'
+    label: Delivered At
+    description: Timestamp when the item was delivered, if applicable.
 
   is_returned:
     sql: '"IS_RETURNED"'
+    label: Is Returned
+    description: True when the line item has been returned by the customer.
 
   is_delivered:
     sql: '"IS_DELIVERED"'
+    label: Is Delivered
+    description: True when the line item has been delivered.
 
   is_shipped:
     sql: '"IS_SHIPPED"'
+    label: Is Shipped
+    description: True when the line item has shipped.
 
   margin:
     sql: '"MARGIN"'
+    label: Margin
+    format: currency_2
+    description: Gross profit on the line item (sale price minus product cost).
+    synonyms: [ profit, gross profit ]
 
   months_since_signup:
     sql: '"MONTHS_SINCE_SIGNUP"'
+    label: Months Since Signup
+    description: Number of months between the customer's signup and this order.
 
   time_to_ship:
     sql: '"TIME_TO_SHIP"'
+    label: Time to Ship (days)
+    description: Number of days between order creation and shipment.
+    synonyms: [ shipping time ]
+
+  # --- New derived dimensions ---
+  days_to_deliver:
+    sql: DATEDIFF(day, ${shipped_at}, ${delivered_at})
+    label: Days to Deliver
+    format: number_0
+    description: Number of days between shipment and delivery. Null until delivered.
+
+  sale_price_band:
+    sql: CASE WHEN ${sale_price} < 25 THEN '1. <$25' WHEN ${sale_price} < 50 THEN
+      '2. $25-$50' WHEN ${sale_price} < 100 THEN '3. $50-$100' ELSE '4. $100+'
+      END
+    label: Sale Price Band
+    description: Sale price bucketed into value tiers for segmentation.
 
 measures:
   count:
+    label: Items Sold
+    description: Number of order line items — each row is one item sold.
     aggregate_type: count
+    synonyms: [ units sold, item count, quantity ]
+
+  sale_price_sum:
+    sql: ${sale_price}
+    label: Total Revenue
+    format: currency_2
+    description: Total revenue (sum of sale price) across line items. Includes
+      returns unless filtered.
+    aggregate_type: sum
+    synonyms: [ revenue, sales, gmv, total sales ]
+
+  valid_revenue:
+    sql: ${sale_price}
+    label: Valid Revenue
+    format: currency_2
+    description: Revenue from all line items except cancelled orders (excludes
+      status = Cancelled). Preferred default for "revenue".
+    aggregate_type: sum
+    filters:
+      status:
+        not: Cancelled
+    synonyms: [ booked revenue, realized revenue, revenue excluding cancellations ]
+
+  margin_sum:
+    sql: ${margin}
+    label: Total Margin
+    format: currency_2
+    description: Total gross profit across line items.
+    aggregate_type: sum
+    synonyms: [ total profit, gross profit ]
+
+  # --- New measures ---
+  order_count:
+    sql: ${order_id}
+    label: Number of Orders
+    format: number_0
+    description: Count of distinct orders (not line items).
+    aggregate_type: count_distinct
+    synonyms: [ orders, order volume ]
+
+  unique_customers:
+    sql: ${user_id}
+    label: Unique Customers
+    format: number_0
+    description: Count of distinct customers who placed orders.
+    aggregate_type: count_distinct
+    synonyms: [ customers, buyers, distinct customers ]
+
+  average_sale_price:
+    sql: ${sale_price}
+    label: Average Sale Price
+    format: currency_2
+    description: Average price paid per line item.
+    aggregate_type: average
+
+  average_order_value:
+    sql: ${sale_price_sum} / NULLIF(${order_count}, 0)
+    label: Average Order Value (AOV)
+    format: currency_2
+    description: Total revenue divided by the number of distinct orders.
+    synonyms: [ aov, average basket ]
+
+  gross_margin_rate:
+    sql: ${margin_sum} / NULLIF(${sale_price_sum}, 0)
+    label: Gross Margin Rate
+    format: percent_2
+    description: Total margin as a percentage of total revenue.
+    synonyms: [ margin percent, margin rate, profit margin ]
+
+  returned_items:
+    label: Returned Items
+    format: number_0
+    description: Number of line items that were returned.
+    aggregate_type: count
+    filters:
+      is_returned:
+        is: true
+
+  return_rate:
+    sql: ${returned_items} / NULLIF(${count}, 0)
+    label: Return Rate
+    format: percent_2
+    description: Share of items sold that were returned.
+    synonyms: [ returns rate ]
+
+  completed_revenue:
+    sql: ${sale_price}
+    label: Completed Revenue
+    format: currency_2
+    description: Revenue from line items with status Complete.
+    aggregate_type: sum
+    filters:
+      status:
+        is: Complete
+
+  returned_revenue:
+    sql: ${sale_price}
+    label: Returned Revenue
+    format: currency_2
+    description: Revenue value of returned line items.
+    aggregate_type: sum
+    filters:
+      is_returned:
+        is: true
+
+  net_revenue:
+    sql: ${sale_price_sum} - ${returned_revenue}
+    label: Net Revenue
+    format: currency_2
+    description: Total revenue minus returned revenue.
+    synonyms: [ revenue net of returns ]
+
+  average_time_to_ship:
+    sql: ${time_to_ship}
+    label: Avg Time to Ship (days)
+    format: number_1
+    description: Average number of days between order creation and shipment.
+    aggregate_type: average
