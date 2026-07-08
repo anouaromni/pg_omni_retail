@@ -1,0 +1,34 @@
+# Reference this view as analytics_prod_finance__assets
+catalog: ANALYTICS_PROD
+schema: FINANCE
+table_name: ASSETS
+
+dimensions:
+  asset_id:
+    sql: '"ASSET_ID"'
+    format: ID
+
+  asset_name:
+    sql: '"ASSET_NAME"'
+
+  asset_type:
+    sql: '"ASSET_TYPE"'
+
+  asset_class:
+    sql: '"ASSET_CLASS"'
+
+  sector:
+    sql: '"SECTOR"'
+
+  current_price:
+    sql: '"CURRENT_PRICE"'
+
+  reference_data:
+    sql: '"REFERENCE_DATA"'
+
+  enriched_at:
+    sql: '"ENRICHED_AT"'
+
+measures:
+  count:
+    aggregate_type: count

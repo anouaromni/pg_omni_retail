@@ -1,0 +1,28 @@
+# Reference this view as analytics_prod_finance__accounts
+catalog: ANALYTICS_PROD
+schema: FINANCE
+table_name: ACCOUNTS
+
+dimensions:
+  account_id:
+    sql: '"ACCOUNT_ID"'
+    format: ID
+
+  account_type:
+    sql: '"ACCOUNT_TYPE"'
+
+  account_status:
+    sql: '"ACCOUNT_STATUS"'
+
+  balance:
+    sql: '"BALANCE"'
+
+  currency:
+    sql: '"CURRENCY"'
+
+  open_date:
+    sql: '"OPEN_DATE"'
+
+measures:
+  count:
+    aggregate_type: count
