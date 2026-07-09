@@ -245,3 +245,11 @@ measures:
     description: The highest single line-item sale price observed.
     aggregate_type: max
     synonyms: [ max price, highest price, top sale price ]
+
+  min_sale_price:
+    sql: ${sale_price}
+    label: Lowest Sale Price
+    format: currency_2
+    description: The lowest single line-item sale price observed.
+    aggregate_type: min
+    synonyms: [ min price, lowest price, cheapest sale price ]
