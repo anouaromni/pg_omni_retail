@@ -237,3 +237,11 @@ measures:
     format: number_1
     description: Average number of days between order creation and shipment.
     aggregate_type: average
+
+  max_sale_price:
+    sql: ${sale_price}
+    label: Highest Sale Price
+    format: currency_2
+    description: The highest single line-item sale price observed.
+    aggregate_type: max
+    synonyms: [ max price, highest price, top sale price ]
