@@ -1,0 +1,16 @@
+# Omni Content Validator config (non-secret settings only).
+# The CLI auto-loads this file from the repo root.
+# Keep secrets like the API key in GitHub Actions secrets, never here.
+
+base_url: https://anouar.playground.exploreomni.dev
+model_id: 01d9bcd6-ebbd-48be-b0be-d39e9fc2f537
+
+# Resolve the Omni branch whose name matches the PR's head branch.
+branch_name: ${GITHUB_HEAD_REF}
+
+# Behavior flags.
+# fail_on_new_only: only fail the check on NEW issues vs. the history baseline,
+# so pre-existing broken content does not block unrelated PRs.
+fail_on_new_only: true
+include_personal_folders: false
+timeout: 60
