@@ -39,22 +39,11 @@ views:
         description: Total discount as a share of total list price.
 
 ai_context: |
-  This topic models Omni Retail's order line items — one row per item within an order.
+  SDLC changes. Omni Retail's order line items — one row per item within an order.
   Base view: analytics_prod_ecomm__order_items (orders), joined to:
     - analytics_prod_ecomm__users (the customer / buyer)
     - analytics_prod_ecomm__products (the product catalog, reached via the inventory_items bridge)
 
-  Field-mapping guidance for natural-language questions:
-    - "revenue", "sales", "GMV"        -> analytics_prod_ecomm__order_items.valid_revenue (excludes Cancelled; preferred default)
-    - "gross revenue" / all statuses   -> analytics_prod_ecomm__order_items.sale_price_sum (Total Revenue, includes Cancelled + Returned)
-    - "net revenue" / after returns    -> analytics_prod_ecomm__order_items.net_revenue
-    - "orders" / "number of orders"    -> analytics_prod_ecomm__order_items.order_count (distinct orders)
-    - "items sold" / "units"           -> analytics_prod_ecomm__order_items.count
-    - "customers" / "buyers"           -> analytics_prod_ecomm__order_items.unique_customers
-    - "AOV" / "average order value"    -> analytics_prod_ecomm__order_items.average_order_value
-    - "margin %" / "profit margin"     -> analytics_prod_ecomm__order_items.gross_margin_rate
-    - "return rate"                    -> analytics_prod_ecomm__order_items.return_rate
-    - "discount"                       -> analytics_prod_ecomm__order_items.total_discount / discount_rate
-
+  
   Grain is per line item: use `count` for items sold and `order_count` (distinct orders) for order counts.
   inventory_items is a pass-through join bridge only — do not surface its fields for analysis.
