@@ -1,0 +1,189 @@
+# Reference this view as omni_dbt__customers
+label: Customer
+schema_label: ""
+#This description was pulled from dbt.
+description: Customer overview data mart, offering key details for each unique
+  customer. One row per customer.
+
+schema: omni_dbt
+table_name: CUSTOMERS
+
+dimensions:
+  customer_id:
+    sql: '"CUSTOMER_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: The unique key of the customers mart.
+    primary_key: true
+
+  customer_name:
+    sql: '"CUSTOMER_NAME"'
+    # This description pulled from the 'customer' dbt semantic model (models/marts/customers.yml)
+    description: Customers' full name.
+
+  count_lifetime_orders:
+    sql: '"COUNT_LIFETIME_ORDERS"'
+    #This description was pulled from dbt.
+    description: Total number of orders a customer has ever placed.
+
+  first_order_date:
+    sql: '"FIRST_ORDER_DATE"'
+    # This description pulled from the 'customer' dbt semantic model (models/marts/customers.yml)
+    description: The date when a customer placed their first order.
+
+  last_order_date:
+    sql: '"LAST_ORDER_DATE"'
+    # This description pulled from the 'customer' dbt semantic model (models/marts/customers.yml)
+    description: The date of a customer's most recent order.
+
+  lifetime_spend_pretax:
+    sql: '"LIFETIME_SPEND_PRETAX"'
+    #This description was pulled from dbt.
+    description: The sum of all the pre-tax subtotals of every order a customer has placed.
+
+  lifetime_tax_paid:
+    sql: '"LIFETIME_TAX_PAID"'
+    #This description was pulled from dbt.
+    description: The sum of all the tax portion of every order a customer has placed.
+
+  lifetime_spend:
+    sql: '"LIFETIME_SPEND"'
+    #This description was pulled from dbt.
+    description: The sum of all the order totals including tax that a customer has
+      ever placed.
+
+  customer_type:
+    sql: '"CUSTOMER_TYPE"'
+    # This description pulled from the 'customer' dbt semantic model (models/marts/customers.yml)
+    description: Options are 'new' or 'returning', indicating if a customer has
+      ordered more than once or has only placed their first order to date.
+    all_values: [ new, returning ]
+
+  _entity_customer:
+    # Entity is defined in the 'customer' dbt semantic model (models/marts/customers.yml)
+    sql: ${omni_dbt__customers.customer_id}
+    description: The unique key of the customers mart.
+    hidden: true
+
+  _filter_returning_customer_count:
+    # Produced by the dbt semantic layer integration
+    sql: ${omni_dbt__customers.customer_type} = 'returning'
+    description: Intermediate filter dimension for measure returning_customer_count
+    hidden: true
+
+measures:
+  count:
+    aggregate_type: count
+
+  revenue_per_customer:
+    # Measure is defined by the 'revenue_per_customer' dbt metric (models/marts/semantic_metrics.yml)
+    sql: CAST(${omni_dbt__order_items.gross_revenue} AS DOUBLE) /
+      NULLIF(CAST(${omni_dbt__customers.customer_count} AS DOUBLE), 0)
+    label: Revenue per Customer
+    description: Gross revenue divided by customer count.
+
+  customer_count:
+    # Measure is defined by the 'customer_count' dbt metric (models/marts/customers.yml)
+    sql: "1"
+    label: Customer Count
+    description: Count of customers.
+    aggregate_type: count
+
+  returning_customer_count:
+    # Measure is defined by the 'returning_customer_count' dbt metric (models/marts/customers.yml)
+    sql: "1"
+    label: Returning Customer Count
+    description: Count of returning customers.
+    aggregate_type: count
+    filters:
+      _filter_returning_customer_count:
+        is: true
+
+  customer_lifetime_value_minus_tax:
+    # Measure is defined by the 'customer_lifetime_value_minus_tax' dbt metric (models/marts/semantic_metrics.yml)
+    sql: ${omni_dbt__customers.customer_lifetime_spend} -
+      ${omni_dbt__customers.customer_lifetime_tax_paid}
+    label: Customer Lifetime Value Minus Tax
+    description: Customer lifetime spend net of lifetime tax paid.
+
+  customer_lifetime_spend:
+    # Measure is defined by the 'customer_lifetime_spend' dbt metric (models/marts/customers.yml)
+    sql: ${omni_dbt__customers.lifetime_spend}
+    label: Customer Lifetime Spend
+    description: Sum of lifetime spend across customers.
+    aggregate_type: sum
+
+  customer_lifetime_tax_paid:
+    # Measure is defined by the 'customer_lifetime_tax_paid' dbt metric (models/marts/customers.yml)
+    sql: ${omni_dbt__customers.lifetime_tax_paid}
+    label: Customer Lifetime Tax Paid
+    description: Sum of lifetime tax paid across customers.
+    aggregate_type: sum
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: customers
+  target_schema: dbt_ahnini
+  description: Customer overview data mart, offering key details for each unique
+    customer. One row per customer.
+  config:
+    materialized: table
+  code: |-
+    with
+
+    customers as (
+
+        select * from {{ ref('stg_customers') }}
+
+    ),
+
+    orders as (
+
+        select * from {{ ref('orders') }}
+
+    ),
+
+    customer_orders_summary as (
+
+        select
+            orders.customer_id,
+
+            count(distinct orders.order_id) as count_lifetime_orders,
+            count(distinct orders.order_id) > 1 as is_repeat_buyer,
+            min(orders.order_date) as first_order_date,
+            max(orders.order_date) as last_order_date,
+            sum(orders.subtotal) as lifetime_spend_pretax,
+            sum(orders.tax_paid) as lifetime_tax_paid,
+            sum(orders.order_total) as lifetime_spend
+
+        from orders
+
+        group by 1
+
+    ),
+
+    joined as (
+
+        select
+            customers.*,
+
+            customer_orders_summary.count_lifetime_orders,
+            customer_orders_summary.first_order_date,
+            customer_orders_summary.last_order_date,
+            customer_orders_summary.lifetime_spend_pretax,
+            customer_orders_summary.lifetime_tax_paid,
+            customer_orders_summary.lifetime_spend,
+
+            case
+                when customer_orders_summary.is_repeat_buyer then 'returning'
+                else 'new'
+            end as customer_type
+
+        from customers
+
+        left join customer_orders_summary
+            on customers.customer_id = customer_orders_summary.customer_id
+
+    )
+
+    select * from joined

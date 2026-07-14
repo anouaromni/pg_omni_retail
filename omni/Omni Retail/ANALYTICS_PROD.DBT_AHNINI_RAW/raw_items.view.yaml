@@ -1,0 +1,30 @@
+# Reference this view as analytics_prod_dbt_ahnini_raw__raw_items
+catalog: ANALYTICS_PROD
+schema: DBT_AHNINI_RAW
+table_name: RAW_ITEMS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  order_id:
+    sql: '"ORDER_ID"'
+    format: ID
+
+  sku:
+    sql: '"SKU"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: raw_items
+  target_schema: dbt_ahnini
+  config:
+    schema: raw
+    materialized: seed
+  referenced_by: [ stg_order_items ]

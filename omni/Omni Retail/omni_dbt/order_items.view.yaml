@@ -1,0 +1,205 @@
+# Reference this view as omni_dbt__order_items
+label: Order Item
+schema_label: ""
+#This description was pulled from dbt.
+description: Line-item fact table for ordered products, with product attributes,
+  supply cost, and customer context.
+
+schema: omni_dbt
+table_name: ORDER_ITEMS
+
+dimensions:
+  order_item_id:
+    sql: '"ORDER_ITEM_ID"'
+    format: ID
+    primary_key: true
+
+  order_id:
+    sql: '"ORDER_ID"'
+    format: ID
+
+  product_id:
+    sql: '"PRODUCT_ID"'
+    format: ID
+
+  customer_id:
+    sql: '"CUSTOMER_ID"'
+    format: ID
+
+  order_date:
+    sql: '"ORDER_DATE"'
+
+  product_name:
+    sql: '"PRODUCT_NAME"'
+
+  product_price:
+    sql: '"PRODUCT_PRICE"'
+
+  is_food_item:
+    sql: '"IS_FOOD_ITEM"'
+
+  is_drink_item:
+    sql: '"IS_DRINK_ITEM"'
+
+  supply_cost:
+    sql: '"SUPPLY_COST"'
+
+  _entity_order_item:
+    # Entity is defined in the 'order_item' dbt semantic model (models/marts/order_items.yml)
+    sql: ${omni_dbt__order_items.order_item_id}
+    hidden: true
+
+  _entity_order_entity:
+    # Entity is defined in the 'order_item' dbt semantic model (models/marts/order_items.yml)
+    sql: ${omni_dbt__order_items.order_id}
+    hidden: true
+
+  _entity_customer:
+    # Entity is defined in the 'order_item' dbt semantic model (models/marts/order_items.yml)
+    sql: ${omni_dbt__order_items.customer_id}
+    hidden: true
+
+  _entity_product:
+    # Entity is defined in the 'order_item' dbt semantic model (models/marts/order_items.yml)
+    sql: ${omni_dbt__order_items.product_id}
+    hidden: true
+
+  _filter_food_revenue:
+    # Produced by the dbt semantic layer integration
+    sql: ${omni_dbt__order_items.is_food_item} = TRUE
+    description: Intermediate filter dimension for measure food_revenue
+    hidden: true
+
+measures:
+  count:
+    aggregate_type: count
+
+  order_item_count:
+    # Measure is defined by the 'order_item_count' dbt metric (models/marts/order_items.yml)
+    sql: "1"
+    label: Order Item Count
+    description: Count of order item rows.
+    aggregate_type: count
+
+  gross_profit:
+    # Measure is defined by the 'gross_profit' dbt metric (models/marts/order_items.yml)
+    sql: ${omni_dbt__order_items.gross_revenue} -
+      ${omni_dbt__order_items.supply_cost_total}
+    label: Gross Profit
+    description: Gross revenue less supply cost.
+
+  food_revenue_share:
+    # Measure is defined by the 'food_revenue_share' dbt metric (models/marts/semantic_metrics.yml)
+    sql: CAST(${omni_dbt__order_items.food_revenue} AS DOUBLE) /
+      NULLIF(CAST(${omni_dbt__order_items.gross_revenue} AS DOUBLE), 0)
+    label: Food Revenue Share
+    description: Share of revenue that comes from food items.
+
+  gross_revenue:
+    # Measure is defined by the 'gross_revenue' dbt metric (models/marts/order_items.yml)
+    sql: ${omni_dbt__order_items.product_price}
+    label: Gross Revenue
+    description: Sum of product prices across all order items.
+    aggregate_type: sum
+
+  food_revenue:
+    # Measure is defined by the 'food_revenue' dbt metric (models/marts/order_items.yml)
+    sql: ${omni_dbt__order_items.product_price}
+    label: Food Revenue
+    description: Revenue from food items only.
+    aggregate_type: sum
+    filters:
+      _filter_food_revenue:
+        is: true
+
+  supply_cost_total:
+    # Measure is defined by the 'supply_cost_total' dbt metric (models/marts/order_items.yml)
+    sql: ${omni_dbt__order_items.supply_cost}
+    label: Supply Cost Total
+    description: Sum of supply cost allocated to ordered items.
+    aggregate_type: sum
+
+  ordering_customer_count:
+    # Measure is defined by the 'ordering_customer_count' dbt metric (models/marts/order_items.yml)
+    sql: ${omni_dbt__order_items.customer_id}
+    label: Ordering Customer Count
+    description: Distinct customers who purchased an order item.
+    aggregate_type: count_distinct
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: order_items
+  target_schema: dbt_ahnini
+  description: Line-item fact table for ordered products, with product attributes,
+    supply cost, and customer context.
+  config:
+    materialized: table
+  code: |-
+    with
+
+    order_items as (
+
+        select * from {{ ref('stg_order_items') }}
+
+    ),
+
+
+    orders as (
+
+        select * from {{ ref('stg_orders') }}
+
+    ),
+
+    products as (
+
+        select * from {{ ref('stg_products') }}
+
+    ),
+
+    supplies as (
+
+        select * from {{ ref('stg_supplies') }}
+
+    ),
+
+    order_supplies_summary as (
+
+        select
+            product_id,
+
+            sum(supply_cost) as supply_cost
+
+        from supplies
+
+        group by 1
+
+    ),
+
+    joined as (
+
+        select
+            order_items.*,
+
+            orders.customer_id,
+            orders.order_date,
+
+            products.product_name,
+            products.product_price,
+            products.is_food_item,
+            products.is_drink_item,
+
+            order_supplies_summary.supply_cost
+
+        from order_items
+
+        left join orders on order_items.order_id = orders.order_id
+
+        left join products on order_items.product_id = products.product_id
+
+        left join order_supplies_summary
+            on order_items.product_id = order_supplies_summary.product_id
+
+    )
+
+    select * from joined
+  referenced_by: [ orders ]
