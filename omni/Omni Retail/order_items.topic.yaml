@@ -45,4 +45,4 @@ ai_context: |-
 
   Joins: users (the buyer) and products (catalog, via the inventory_items bridge). inventory_items is a pass-through bridge — do not surface its fields; use products for product attributes.
 
-  For business-specific terms not inferable from this model (e.g. region codenames, internal naming/conventions), search Notion first before answering, then fall back to the modeled data.
+  For business-specific term not inferable from this model (e.g. region codenames, internal naming/conventions), search Notion first before answering, then fall back to the modeled data.
