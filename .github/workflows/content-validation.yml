@@ -12,9 +12,9 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     env:
-      OMNI_BASE_URL: https://anouar.playground.exploreomni.dev
-      OMNI_MODEL_ID: 01d9bcd6-ebbd-48be-b0be-d39e9fc2f537
-      OMNI_API_KEY: ${{ secrets.OMNI_API_KEY }}
+      OMNI_BASE_URL: https://ani.omniapp.co
+      OMNI_MODEL_ID: 09472205-1842-42c1-a57d-e27aa798066d
+      OMNI_API_KEY: ${{ secrets.ANI_OMNI_API_KEY }}
       # Empty on non-PR runs -> validates the base model instead of a branch.
       OMNI_BRANCH_NAME: ${{ github.head_ref }}
     steps:

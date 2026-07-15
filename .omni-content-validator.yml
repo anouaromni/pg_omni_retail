@@ -2,8 +2,8 @@
 # The CLI auto-loads this file from the repo root.
 # Keep secrets like the API key in GitHub Actions secrets, never here.
 
-base_url: https://anouar.playground.exploreomni.dev
-model_id: 01d9bcd6-ebbd-48be-b0be-d39e9fc2f537
+base_url: https://ani.omniapp.co
+model_id: 09472205-1842-42c1-a57d-e27aa798066d
 
 # Resolve the Omni branch whose name matches the PR's head branch.
 branch_name: ${GITHUB_HEAD_REF}
