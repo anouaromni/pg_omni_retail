@@ -11,66 +11,28 @@ dimensions:
 
   cost:
     sql: '"COST"'
-    label: Product Cost
-    format: currency_2
-    description: Cost of goods for the product; basis for margin.
 
   category:
     sql: '"CATEGORY"'
-    label: Product Category
-    description: Product category (e.g. Jeans, Dresses, Accessories).
-    sample_values:
-      [
-        Accessories,
-        Active,
-        Dresses,
-        Jeans,
-        Intimates,
-        Outerwear & Coats,
-        Pants,
-        Shorts,
-        Skirts,
-        Sleep & Lounge
-      ]
-    synonyms: [ product type, category ]
 
   name:
     sql: '"NAME"'
-    label: Product Name
-    description: Name of the product.
-    synonyms: [ item name, product ]
 
   brand:
     sql: '"BRAND"'
-    label: Brand
-    description: Brand of the product.
-    synonyms: [ label, manufacturer ]
 
   retail_price:
     sql: '"RETAIL_PRICE"'
-    label: Retail Price
-    format: currency_2
-    description: List (retail) price of the product before any discount. For revenue
-      actually paid, use Order Items sale price.
-    synonyms: [ list price, msrp ]
 
   department:
     sql: '"DEPARTMENT"'
-    label: Department
-    description: Top-level department the product belongs to (e.g. Men, Women).
-    sample_values: [ Men, Women ]
 
   sku:
     sql: '"SKU"'
-    label: SKU
-    format: ID
-    description: Stock keeping unit identifier for the product.
 
   distribution_center_id:
     sql: '"DISTRIBUTION_CENTER_ID"'
-    label: Distribution Center ID
     format: ID
-    description: Identifier of the distribution center the product ships from.
 
 measures:
   count:
