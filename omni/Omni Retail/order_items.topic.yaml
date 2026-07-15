@@ -38,12 +38,15 @@ views:
         format: percent_2
         description: Total discount as a share of total list price.
 
-ai_context: |
-  SDLC changes. Omni Retail's order line items — one row per item within an order.
-  Base view: analytics_prod_ecomm__order_items (orders), joined to:
+ai_context: |-
+  Omni Retail's order line items — one row per item within an order.
+
+  Base view: analytics_prod_ecomm__order_items (the line item), joined to:
     - analytics_prod_ecomm__users (the customer / buyer)
     - analytics_prod_ecomm__products (the product catalog, reached via the inventory_items bridge)
 
-
   Grain is per line item: use `count` for items sold and `order_count` (distinct orders) for order counts.
+
   inventory_items is a pass-through join bridge only — do not surface its fields for analysis.
+
+  Additional business context lives in Notion. For anything business-specific that cannot be inferred from the data in this model — for example, region codenames and other internal naming, definitions, or conventions — search Notion first before answering. Treat Notion as the default starting point for resolving these business-specific terms, and only fall back to the modeled data once you've checked there.
