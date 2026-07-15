@@ -1,6 +1,7 @@
 # Omni Content Validator config (non-secret settings only).
 # The CLI auto-loads this file from the repo root.
 # Keep secrets like the API key in GitHub Actions secrets, never here.
+# Need to be parametrized for later
 
 base_url: https://ani.omniapp.co
 model_id: 09472205-1842-42c1-a57d-e27aa798066d
