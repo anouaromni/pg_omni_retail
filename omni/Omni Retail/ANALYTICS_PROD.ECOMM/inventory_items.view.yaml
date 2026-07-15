@@ -47,3 +47,7 @@ dimensions:
 measures:
   count:
     aggregate_type: count
+
+ai_context: Pass-through join bridge only, linking order items to the products
+  catalog. Do not surface these fields for analysis — use the Products view for
+  product attributes (category, brand, name, retail price) instead.

@@ -1,4 +1,6 @@
 # Reference this view as analytics_prod_ecomm__users
+description: Customers (buyers). One row per registered user.
+
 catalog: ANALYTICS_PROD
 schema: ECOMM
 table_name: USERS
@@ -11,42 +13,76 @@ dimensions:
 
   first_name:
     sql: '"FIRST_NAME"'
+    label: First Name
+    description: Customer's first name.
 
   last_name:
     sql: '"LAST_NAME"'
+    label: Last Name
+    description: Customer's last name.
 
   email:
     sql: '"EMAIL"'
+    label: Email
+    description: Customer's email address.
 
   age:
     sql: '"AGE"'
+    label: Age
+    description: Customer's age in years.
 
   city:
     sql: '"CITY"'
+    label: City
+    description: Customer's city.
 
   state:
     sql: '"STATE"'
+    label: State
+    description: Customer's state or province.
 
   country:
     sql: '"COUNTRY"'
+    label: Country
+    description: Customer's country.
+    synonyms: [ nation ]
 
   zip:
     sql: '"ZIP"'
+    label: Zip Code
+    description: Customer's postal / zip code.
+    synonyms: [ postal code ]
 
   latitude:
     sql: '"LATITUDE"'
+    label: Latitude
+    description: Customer location latitude, for mapping.
 
   longitude:
     sql: '"LONGITUDE"'
+    label: Longitude
+    description: Customer location longitude, for mapping.
 
   gender:
     sql: '"GENDER"'
+    label: Gender
+    description: Customer's gender.
+    sample_values: [ F, M ]
 
   created_at:
     sql: '"CREATED_AT"'
+    label: Signup Date
+    description: When the customer signed up / registered. This is the account
+      creation date, NOT the order date — for order timing use Order Items
+      created date.
+    synonyms: [ signup date, registration date, account created ]
 
   traffic_source:
     sql: '"TRAFFIC_SOURCE"'
+    label: Traffic Source
+    description: Acquisition channel the customer arrived through.
+    sample_values: [ Display, Email, Facebook, Organic, Search ]
+    synonyms: [ acquisition channel, marketing channel, source ]
 
 measures:
   count:
