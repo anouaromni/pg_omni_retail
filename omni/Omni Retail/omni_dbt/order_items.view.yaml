@@ -70,12 +70,6 @@ dimensions:
     description: Intermediate filter dimension for measure food_revenue
     hidden: true
 
-  products_product_price_10:
-    sql: '"PRODUCTS.PRODUCT_PRICE*10"'
-
-  new_product_name:
-    sql: '"NEW_PRODUCT_NAME"'
-
 measures:
   count:
     aggregate_type: count
