@@ -99,14 +99,14 @@ measures:
 
   gross_revenue:
     # Measure is defined by the 'gross_revenue' dbt metric (models/marts/order_items.yml)
-    sql: '"PRODUCT_PRICE"'
+    sql: ${product_price}
     label: Gross Revenue
     description: Sum of product prices across all order items.
     aggregate_type: sum
 
   food_revenue:
     # Measure is defined by the 'food_revenue' dbt metric (models/marts/order_items.yml)
-    sql: '"PRODUCT_PRICE"'
+    sql: ${product_price}
     label: Food Revenue
     description: Revenue from food items only.
     aggregate_type: sum
