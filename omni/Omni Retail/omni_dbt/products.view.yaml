@@ -27,9 +27,6 @@ dimensions:
   is_drink_item:
     sql: '"IS_DRINK_ITEM"'
 
-  product_name_changed:
-    sql: '"PRODUCT_NAME_CHANGED"'
-
 measures:
   count:
     aggregate_type: count
