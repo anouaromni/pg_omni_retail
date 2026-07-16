@@ -39,10 +39,12 @@ views:
         description: Total discount as a share of total list price.
 
 ai_context: |-
-  Omni Retail order line items — one row per item within an order.
+  Omni Retail order line items — one row per item within an order (grain = line item).
 
-  Grain is per line item: use `count` for items sold and `order_count` for distinct orders. For "revenue", prefer `valid_revenue` (excludes cancelled).
+  Metrics: `count` = items sold; `order_count` = distinct orders; `total_sale_price` = realized revenue; `total_margin` = profit. Prefer these over ad-hoc sums.
 
-  Joins: users (the buyer) and products (catalog, via the inventory_items bridge). inventory_items is a pass-through bridge — do not surface its fields; use products for product attributes.
+  `status` values: Complete, Shipped, Processing, Returned, Cancelled. Exclude Cancelled for realized sales; treat Returned separately for net-of-returns.
 
-  For business-specific term not inferable from this model (e.g. region codenames, internal naming/conventions), search Notion first before answering, then fall back to the modeled data.
+  Joins: users (the buyer) and products (catalog, via the inventory_items bridge). inventory_items is a pass-through bridge — use products for product attributes.
+
+  For business-specific terms not inferable from this model (e.g. region codenames, internal conventions), search Notion first, then fall back to the modeled data.

@@ -60,3 +60,30 @@ dimensions:
 measures:
   count:
     aggregate_type: count
+
+  total_sale_price:
+    sql: ${sale_price}
+    label: Total Sale Price
+    format: currency_2
+    description: Total revenue actually paid across line items (sum of sale price).
+      This is realized revenue, not list price.
+    aggregate_type: sum
+    synonyms: [ revenue, sales, total revenue, gmv ]
+
+  order_count:
+    sql: ${order_id}
+    label: Order Count
+    format: number_0
+    description: Number of distinct orders. Use this for order counts — the `count`
+      measure counts line items, not orders.
+    aggregate_type: count_distinct
+    synonyms: [ orders, number of orders, distinct orders ]
+
+  total_margin:
+    sql: ${margin}
+    label: Total Margin
+    format: currency_2
+    description: Total profit across line items (sum of per-line-item margin = sale
+      price minus cost).
+    aggregate_type: sum
+    synonyms: [ profit, gross profit, margin dollars ]
