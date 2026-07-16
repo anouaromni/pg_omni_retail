@@ -27,6 +27,9 @@ dimensions:
   is_drink_item:
     sql: '"IS_DRINK_ITEM"'
 
+  product_name_changed:
+    sql: '"PRODUCT_NAME_CHANGED"'
+
 measures:
   count:
     aggregate_type: count
@@ -48,8 +51,10 @@ dbt:
 
     select
         product_id,
-        product_name_changed,
+        product_name as product_name_changed,
+        product_type,
         product_description,
-        price,
-        created_at
+        product_price,
+        is_food_item,
+        is_drink_item
     from products
