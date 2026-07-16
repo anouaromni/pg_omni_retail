@@ -54,3 +54,4 @@ dbt:
         is_food_item,
         is_drink_item
     from products
+  referenced_by: [ products_ltv ]

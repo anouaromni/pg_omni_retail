@@ -1,0 +1,38 @@
+# Reference this view as omni_dbt__products_ltv
+schema_label: ""
+
+schema: omni_dbt
+table_name: PRODUCTS_LTV
+
+dimensions:
+  product_id:
+    sql: '"PRODUCT_ID"'
+    format: ID
+
+  gross_revenue:
+    sql: '"GROSS_REVENUE"'
+
+  gross_profit:
+    sql: '"GROSS_PROFIT"'
+
+  supply_cost_total:
+    sql: '"SUPPLY_COST_TOTAL"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: products_ltv
+  target_schema: DBT_AHNINI
+  config:
+    materialized: table
+  code: |-
+    SELECT "omni_dbt__products"."PRODUCT_ID",
+        COALESCE(SUM("omni_dbt__order_items"."PRODUCT_PRICE"), 0) AS "GROSS_REVENUE",
+        COALESCE(SUM("omni_dbt__order_items"."PRODUCT_PRICE"), 0) - COALESCE(SUM("omni_dbt__order_items"."SUPPLY_COST"), 0) AS "GROSS_PROFIT",
+        COALESCE(SUM("omni_dbt__order_items"."SUPPLY_COST"), 0) AS "SUPPLY_COST_TOTAL"
+    FROM {{ref('order_items')}} AS "omni_dbt__order_items"
+        LEFT JOIN {{ref('products')}} AS "omni_dbt__products" ON "omni_dbt__order_items"."PRODUCT_ID" = "omni_dbt__products"."PRODUCT_ID"
+    GROUP BY 1

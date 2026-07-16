@@ -202,4 +202,4 @@ dbt:
     )
 
     select * from joined
-  referenced_by: [ orders ]
+  referenced_by: [ orders, products_ltv ]
