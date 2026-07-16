@@ -1,0 +1,34 @@
+# Reference this view as omni_dbt_raw__raw_products
+schema_label: ""
+
+schema: omni_dbt_raw
+table_name: RAW_PRODUCTS
+
+dimensions:
+  sku:
+    sql: '"SKU"'
+
+  name:
+    sql: '"NAME"'
+
+  type:
+    sql: '"TYPE"'
+
+  price:
+    sql: '"PRICE"'
+
+  description:
+    sql: '"DESCRIPTION"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: raw_products
+  target_schema: DBT_AHNINI
+  config:
+    schema: raw
+    materialized: seed
+  referenced_by: [ stg_products ]
