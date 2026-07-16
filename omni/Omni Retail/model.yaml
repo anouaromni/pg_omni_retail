@@ -1,1 +1,2 @@
-{}
+# Exclude the Jaffle topic from the AI agent, dashboard assistant, and embedded chat
+ai_chat_topics: [ all_topics, -jaffle ]
