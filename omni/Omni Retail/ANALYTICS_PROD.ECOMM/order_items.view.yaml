@@ -29,6 +29,7 @@ dimensions:
 
   created_at:
     sql: '"CREATED_AT"'
+    timeframes: [ raw, date, week, month, quarter, year, week_of_year ]
 
   returned_at:
     sql: '"RETURNED_AT"'
