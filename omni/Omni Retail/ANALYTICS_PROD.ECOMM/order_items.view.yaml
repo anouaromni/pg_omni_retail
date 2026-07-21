@@ -57,6 +57,13 @@ dimensions:
   time_to_ship:
     sql: '"TIME_TO_SHIP"'
 
+  week_number:
+    sql: EXTRACT(WEEK FROM ${created_at})
+    label: Week Number
+    description: Week number of the year (1-53) that the order line item was
+      created, based on created_at.
+    synonyms: [ week of year, week num, week ]
+
 measures:
   count:
     aggregate_type: count
