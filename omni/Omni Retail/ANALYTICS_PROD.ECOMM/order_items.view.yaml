@@ -61,12 +61,12 @@ dimensions:
   order_year:
     sql: CAST(EXTRACT(YEAR FROM ${created_at}) AS VARCHAR)
     label: Order Year
-    description: Calendar year the order line item was created. Provides dropdown
-      suggestions for filtering.
+    description: Calendar year the order line item was created. Suggestions are
+      filtered by the selected Order Month and Order Week.
     group_label: Order Date Parts
     synonyms: [ year ]
     faceting:
-      depends_on: []
+      depends_on: [ order_month, order_week_of_year ]
 
   order_month:
     sql: CASE EXTRACT(MONTH FROM ${created_at}) WHEN 1 THEN 'January' WHEN 2 THEN
@@ -76,21 +76,24 @@ dimensions:
       'December' END
     label: Order Month
     description: Month name (January-December) the order line item was created.
-      Suggestions are filtered by the selected Order Year, sorted in calendar
-      order.
+      Suggestions are filtered by the selected Order Year and Order Week, sorted
+      in calendar order.
     group_label: Order Date Parts
     order_by_field: order_month_num
     synonyms: [ month ]
     faceting:
-      depends_on: [ order_year ]
+      depends_on: [ order_year, order_week_of_year ]
 
   order_week_of_year:
-    sql: LPAD(CAST(EXTRACT(WEEK FROM ${created_at}) AS VARCHAR), 2, '0')
-    label: Order Week Number
-    description: Week number of the year (1-53) the order line item was created.
-      Suggestions are filtered by the selected Order Year and Order Month.
+    sql: CONCAT(LPAD(CAST(EXTRACT(WEEK FROM ${created_at}) AS VARCHAR), 2, '0'),
+      'Y', RIGHT(CAST(EXTRACT(YEAR FROM ${created_at}) AS VARCHAR), 2))
+    label: Order Week
+    description: Week of the year combined with the two-digit year (format WWYyy,
+      e.g. 01Y26 = week 1 of 2026). Uniquely identifies a single week in a
+      single year so filtering to a week does not match the same week number
+      across other years.
     group_label: Order Date Parts
-    synonyms: [ week number, week of year, week num ]
+    synonyms: [ week, week of year, week num, week number ]
     faceting:
       depends_on: [ order_year, order_month ]
 
