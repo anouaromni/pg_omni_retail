@@ -1,5 +1,14 @@
 base_view: analytics_prod_ecomm__order_items
 
+# Excludes the calendar date-part dimensions from AI context while keeping them usable as UI filters.
+ai_fields:
+  [
+    all_views.*,
+    -analytics_prod_ecomm__order_items.order_year,
+    -analytics_prod_ecomm__order_items.order_month,
+    -analytics_prod_ecomm__order_items.order_week_of_year
+  ]
+
 joins:
   analytics_prod_ecomm__users: {}
   analytics_prod_ecomm__inventory_items:
