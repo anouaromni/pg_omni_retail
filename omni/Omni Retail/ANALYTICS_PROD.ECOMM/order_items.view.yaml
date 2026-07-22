@@ -85,15 +85,12 @@ dimensions:
       depends_on: [ order_year, order_week_of_year ]
 
   order_week_of_year:
-    sql: CONCAT(LPAD(CAST(EXTRACT(WEEK FROM ${created_at}) AS VARCHAR), 2, '0'),
-      'Y', RIGHT(CAST(EXTRACT(YEAR FROM ${created_at}) AS VARCHAR), 2))
-    label: Order Week
-    description: Week of the year combined with the two-digit year (format WWYyy,
-      e.g. 01Y26 = week 1 of 2026). Uniquely identifies a single week in a
-      single year so filtering to a week does not match the same week number
-      across other years.
+    sql: LPAD(CAST(EXTRACT(WEEK FROM ${created_at}) AS VARCHAR), 2, '0')
+    label: Order Week Number
+    description: Week number of the year (01-53) the order line item was created.
+      Suggestions are filtered by the selected Order Year and Order Month.
     group_label: Order Date Parts
-    synonyms: [ week, week of year, week num, week number ]
+    synonyms: [ week number, week of year, week num, week ]
     faceting:
       depends_on: [ order_year, order_month ]
 
