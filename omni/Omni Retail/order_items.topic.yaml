@@ -8,6 +8,10 @@ ai_fields:
     -analytics_prod_ecomm__order_items.order_month,
     -analytics_prod_ecomm__order_items.order_week_of_year
   ]
+access_filters:
+  - field: analytics_prod_ecomm__products.brand
+    user_attribute: brand
+    values_for_unfiltered: [ all_brands ]
 
 joins:
   analytics_prod_ecomm__users: {}
