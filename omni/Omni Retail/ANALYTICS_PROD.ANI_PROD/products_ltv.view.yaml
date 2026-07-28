@@ -1,10 +1,10 @@
-# Reference this view as omni_dbt__products_ltv
-schema_label: ""
+# Reference this view as analytics_prod_ani_prod__products_ltv
 #This description was pulled from dbt.
 description: |
   Product lifetime value mart with one row per product. This model summarizes all historical order items to show each product's lifetime gross revenue, lifetime gross profit, and total supply cost, making it the primary mart for analyzing product-level LTV and long-run product profitability.
 
-schema: omni_dbt
+catalog: ANALYTICS_PROD
+schema: ANI_PROD
 table_name: PRODUCTS_LTV
 
 dimensions:

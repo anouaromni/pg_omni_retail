@@ -1,7 +1,6 @@
-# Reference this view as omni_dbt_raw__raw_items
-schema_label: ""
-
-schema: omni_dbt_raw
+# Reference this view as analytics_prod_ani_prod_raw__raw_items
+catalog: ANALYTICS_PROD
+schema: ANI_PROD_RAW
 table_name: RAW_ITEMS
 
 dimensions:

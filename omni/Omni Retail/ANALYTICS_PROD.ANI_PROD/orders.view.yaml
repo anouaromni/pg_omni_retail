@@ -1,11 +1,11 @@
-# Reference this view as omni_dbt__orders
-schema_label: ""
+# Reference this view as analytics_prod_ani_prod__orders
 #This description was pulled from dbt.
 description: Order overview data mart, offering key details for each order
   inlcluding if it's a customer's first order and a food vs. drink item
   breakdown. One row per order.
 
-schema: omni_dbt
+catalog: ANALYTICS_PROD
+schema: ANI_PROD
 table_name: ORDERS
 
 dimensions:

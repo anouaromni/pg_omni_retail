@@ -1,10 +1,10 @@
-# Reference this view as omni_dbt__stg_customers
-schema_label: ""
+# Reference this view as analytics_prod_ani_prod__stg_customers
 #This description was pulled from dbt.
 description: Customer data with basic cleaning and transformation applied, one
   row per customer.
 
-schema: omni_dbt
+catalog: ANALYTICS_PROD
+schema: ANI_PROD
 table_name: STG_CUSTOMERS
 
 dimensions:

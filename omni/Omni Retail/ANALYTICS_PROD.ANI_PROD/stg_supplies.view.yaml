@@ -1,11 +1,11 @@
-# Reference this view as omni_dbt__stg_supplies
-schema_label: ""
+# Reference this view as analytics_prod_ani_prod__stg_supplies
 #This description was pulled from dbt.
 description: |
   List of our supply expenses data with basic cleaning and transformation applied.
   One row per supply cost, not per supply. As supply costs fluctuate they receive a new row with a new UUID. Thus there can be multiple rows per supply_id.
 
-schema: omni_dbt
+catalog: ANALYTICS_PROD
+schema: ANI_PROD
 table_name: STG_SUPPLIES
 
 dimensions:

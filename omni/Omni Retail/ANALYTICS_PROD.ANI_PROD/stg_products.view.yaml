@@ -1,10 +1,10 @@
-# Reference this view as omni_dbt__stg_products
-schema_label: ""
+# Reference this view as analytics_prod_ani_prod__stg_products
 #This description was pulled from dbt.
 description: Product (food and drink items that can be ordered) data with basic
   cleaning and transformation applied, one row per product.
 
-schema: omni_dbt
+catalog: ANALYTICS_PROD
+schema: ANI_PROD
 table_name: STG_PRODUCTS
 
 dimensions:

@@ -1,9 +1,9 @@
-# Reference this view as omni_dbt__stg_order_items
-schema_label: ""
+# Reference this view as analytics_prod_ani_prod__stg_order_items
 #This description was pulled from dbt.
 description: Individual food and drink items that make up our orders, one row per item.
 
-schema: omni_dbt
+catalog: ANALYTICS_PROD
+schema: ANI_PROD
 table_name: STG_ORDER_ITEMS
 
 dimensions:

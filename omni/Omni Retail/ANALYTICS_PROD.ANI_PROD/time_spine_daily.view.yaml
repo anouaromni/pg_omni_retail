@@ -1,9 +1,9 @@
-# Reference this view as omni_dbt__time_spine_daily
-schema_label: ""
+# Reference this view as analytics_prod_ani_prod__time_spine_daily
 #This description was pulled from dbt.
 description: Daily time spine for MetricFlow joins and cumulative calculations.
 
-schema: omni_dbt
+catalog: ANALYTICS_PROD
+schema: ANI_PROD
 table_name: TIME_SPINE_DAILY
 
 dimensions:

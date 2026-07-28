@@ -1,11 +1,11 @@
-# Reference this view as omni_dbt__customers
+# Reference this view as analytics_prod_ani_prod__customers
 label: Customer
-schema_label: ""
 #This description was pulled from dbt.
 description: Customer overview data mart, offering key details for each unique
   customer. One row per customer.
 
-schema: omni_dbt
+catalog: ANALYTICS_PROD
+schema: ANI_PROD
 table_name: CUSTOMERS
 
 dimensions:
@@ -61,13 +61,13 @@ dimensions:
 
   _entity_customer:
     # Entity is defined in the 'customer' dbt semantic model (models/marts/customers.yml)
-    sql: ${omni_dbt__customers.customer_id}
+    sql: ${customer_id}
     description: The unique key of the customers mart.
     hidden: true
 
   _filter_returning_customer_count:
     # Produced by the dbt semantic layer integration
-    sql: ${omni_dbt__customers.customer_type} = 'returning'
+    sql: ${customer_type} = 'returning'
     description: Intermediate filter dimension for measure returning_customer_count
     hidden: true
 
@@ -77,8 +77,8 @@ measures:
 
   revenue_per_customer:
     # Measure is defined by the 'revenue_per_customer' dbt metric (models/marts/semantic_metrics.yml)
-    sql: CAST(${omni_dbt__order_items.gross_revenue} AS DOUBLE) /
-      NULLIF(CAST(${omni_dbt__customers.customer_count} AS DOUBLE), 0)
+    sql: CAST(${analytics_prod_ani_prod__order_items.gross_revenue} AS DOUBLE) /
+      NULLIF(CAST(${customer_count} AS DOUBLE), 0)
     label: Revenue per Customer
     description: Gross revenue divided by customer count.
 
@@ -101,21 +101,20 @@ measures:
 
   customer_lifetime_value_minus_tax:
     # Measure is defined by the 'customer_lifetime_value_minus_tax' dbt metric (models/marts/semantic_metrics.yml)
-    sql: ${omni_dbt__customers.customer_lifetime_spend} -
-      ${omni_dbt__customers.customer_lifetime_tax_paid}
+    sql: ${customer_lifetime_spend} - ${customer_lifetime_tax_paid}
     label: Customer Lifetime Value Minus Tax
     description: Customer lifetime spend net of lifetime tax paid.
 
   customer_lifetime_spend:
     # Measure is defined by the 'customer_lifetime_spend' dbt metric (models/marts/customers.yml)
-    sql: ${omni_dbt__customers.lifetime_spend}
+    sql: ${lifetime_spend}
     label: Customer Lifetime Spend
     description: Sum of lifetime spend across customers.
     aggregate_type: sum
 
   customer_lifetime_tax_paid:
     # Measure is defined by the 'customer_lifetime_tax_paid' dbt metric (models/marts/customers.yml)
-    sql: ${omni_dbt__customers.lifetime_tax_paid}
+    sql: ${lifetime_tax_paid}
     label: Customer Lifetime Tax Paid
     description: Sum of lifetime tax paid across customers.
     aggregate_type: sum

@@ -1,4 +1,12 @@
 # Relationship is defined in the 'order_item' dbt semantic model (models/marts/order_items.yml)
+- join_from_view: analytics_prod_ani_prod__order_items
+  join_to_view: analytics_prod_ani_prod__customers
+  join_type: always_left
+  on_sql: ${analytics_prod_ani_prod__order_items._entity_customer} =
+    ${analytics_prod_ani_prod__customers._entity_customer}
+  relationship_type: assumed_many_to_one
+
+# Relationship is defined in the 'order_item' dbt semantic model (models/marts/order_items.yml)
 - join_from_view: analytics_prod_dbt_ahnini__order_items
   join_to_view: analytics_prod_dbt_ahnini__customers
   join_type: always_left

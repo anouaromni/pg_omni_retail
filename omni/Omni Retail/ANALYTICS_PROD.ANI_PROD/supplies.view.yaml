@@ -1,7 +1,6 @@
-# Reference this view as omni_dbt__supplies
-schema_label: ""
-
-schema: omni_dbt
+# Reference this view as analytics_prod_ani_prod__supplies
+catalog: ANALYTICS_PROD
+schema: ANI_PROD
 table_name: SUPPLIES
 
 dimensions:

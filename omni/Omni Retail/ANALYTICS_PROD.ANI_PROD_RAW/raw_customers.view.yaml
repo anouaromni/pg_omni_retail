@@ -1,8 +1,7 @@
-# Reference this view as omni_dbt_raw__raw_items
-schema_label: ""
-
-schema: omni_dbt_raw
-table_name: RAW_ITEMS
+# Reference this view as analytics_prod_ani_prod_raw__raw_customers
+catalog: ANALYTICS_PROD
+schema: ANI_PROD_RAW
+table_name: RAW_CUSTOMERS
 
 dimensions:
   id:
@@ -10,12 +9,8 @@ dimensions:
     format: ID
     primary_key: true
 
-  order_id:
-    sql: '"ORDER_ID"'
-    format: ID
-
-  sku:
-    sql: '"SKU"'
+  name:
+    sql: '"NAME"'
 
 measures:
   count:
@@ -23,9 +18,9 @@ measures:
 
 #The info below was pulled from your dbt repository and is read-only.
 dbt:
-  name: raw_items
+  name: raw_customers
   target_schema: ANI_PROD
   config:
     schema: raw
     materialized: seed
-  referenced_by: [ stg_order_items ]
+  referenced_by: [ stg_customers ]

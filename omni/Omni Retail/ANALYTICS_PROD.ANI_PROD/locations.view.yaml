@@ -1,7 +1,6 @@
-# Reference this view as omni_dbt__locations
-schema_label: ""
-
-schema: omni_dbt
+# Reference this view as analytics_prod_ani_prod__locations
+catalog: ANALYTICS_PROD
+schema: ANI_PROD
 table_name: LOCATIONS
 
 dimensions:

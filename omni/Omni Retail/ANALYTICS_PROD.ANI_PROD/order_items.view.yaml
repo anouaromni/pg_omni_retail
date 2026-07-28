@@ -1,11 +1,11 @@
-# Reference this view as omni_dbt__order_items
+# Reference this view as analytics_prod_ani_prod__order_items
 label: Order Item
-schema_label: ""
 #This description was pulled from dbt.
 description: Line-item fact table for ordered products, with product attributes,
   supply cost, and customer context.
 
-schema: omni_dbt
+catalog: ANALYTICS_PROD
+schema: ANI_PROD
 table_name: ORDER_ITEMS
 
 dimensions:
@@ -46,27 +46,27 @@ dimensions:
 
   _entity_order_item:
     # Entity is defined in the 'order_item' dbt semantic model (models/marts/order_items.yml)
-    sql: ${omni_dbt__order_items.order_item_id}
+    sql: ${order_item_id}
     hidden: true
 
   _entity_order_entity:
     # Entity is defined in the 'order_item' dbt semantic model (models/marts/order_items.yml)
-    sql: ${omni_dbt__order_items.order_id}
+    sql: ${order_id}
     hidden: true
 
   _entity_customer:
     # Entity is defined in the 'order_item' dbt semantic model (models/marts/order_items.yml)
-    sql: ${omni_dbt__order_items.customer_id}
+    sql: ${customer_id}
     hidden: true
 
   _entity_product:
     # Entity is defined in the 'order_item' dbt semantic model (models/marts/order_items.yml)
-    sql: ${omni_dbt__order_items.product_id}
+    sql: ${product_id}
     hidden: true
 
   _filter_food_revenue:
     # Produced by the dbt semantic layer integration
-    sql: ${omni_dbt__order_items.is_food_item} = TRUE
+    sql: ${is_food_item} = TRUE
     description: Intermediate filter dimension for measure food_revenue
     hidden: true
 
@@ -83,28 +83,27 @@ measures:
 
   food_revenue_share:
     # Measure is defined by the 'food_revenue_share' dbt metric (models/marts/semantic_metrics.yml)
-    sql: CAST(${omni_dbt__order_items.food_revenue} AS DOUBLE) /
-      NULLIF(CAST(${omni_dbt__order_items.gross_revenue} AS DOUBLE), 0)
+    sql: CAST(${food_revenue} AS DOUBLE) / NULLIF(CAST(${gross_revenue} AS DOUBLE),
+      0)
     label: Food Revenue Share
     description: Share of revenue that comes from food items.
 
   gross_profit:
     # Measure is defined by the 'gross_profit' dbt metric (models/marts/order_items.yml)
-    sql: ${omni_dbt__order_items.gross_revenue} -
-      ${omni_dbt__order_items.supply_cost_total}
+    sql: ${gross_revenue} - ${supply_cost_total}
     label: Gross Profit
     description: Gross revenue less supply cost.
 
   gross_revenue:
     # Measure is defined by the 'gross_revenue' dbt metric (models/marts/order_items.yml)
-    sql: ${omni_dbt__order_items.product_price}
+    sql: ${product_price}
     label: Gross Revenue
     description: Sum of product prices across all order items.
     aggregate_type: sum
 
   food_revenue:
     # Measure is defined by the 'food_revenue' dbt metric (models/marts/order_items.yml)
-    sql: ${omni_dbt__order_items.product_price}
+    sql: ${product_price}
     label: Food Revenue
     description: Revenue from food items only.
     aggregate_type: sum
@@ -114,14 +113,14 @@ measures:
 
   supply_cost_total:
     # Measure is defined by the 'supply_cost_total' dbt metric (models/marts/order_items.yml)
-    sql: ${omni_dbt__order_items.supply_cost}
+    sql: ${supply_cost}
     label: Supply Cost Total
     description: Sum of supply cost allocated to ordered items.
     aggregate_type: sum
 
   ordering_customer_count:
     # Measure is defined by the 'ordering_customer_count' dbt metric (models/marts/order_items.yml)
-    sql: ${omni_dbt__order_items.customer_id}
+    sql: ${customer_id}
     label: Ordering Customer Count
     description: Distinct customers who purchased an order item.
     aggregate_type: count_distinct

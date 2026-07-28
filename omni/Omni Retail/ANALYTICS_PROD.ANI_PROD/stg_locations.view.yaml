@@ -1,10 +1,10 @@
-# Reference this view as omni_dbt__stg_locations
-schema_label: ""
+# Reference this view as analytics_prod_ani_prod__stg_locations
 #This description was pulled from dbt.
 description: List of open locations with basic cleaning and transformation
   applied, one row per location.
 
-schema: omni_dbt
+catalog: ANALYTICS_PROD
+schema: ANI_PROD
 table_name: STG_LOCATIONS
 
 dimensions:
