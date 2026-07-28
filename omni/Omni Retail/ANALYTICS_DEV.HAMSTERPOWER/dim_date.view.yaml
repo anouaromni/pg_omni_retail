@@ -1,0 +1,36 @@
+# Reference this view as analytics_dev_hamsterpower__dim_date
+catalog: ANALYTICS_DEV
+schema: HAMSTERPOWER
+table_name: DIM_DATE
+
+dimensions:
+  date_key:
+    sql: '"DATE_KEY"'
+
+  full_date:
+    sql: '"FULL_DATE"'
+
+  year:
+    sql: '"YEAR"'
+
+  quarter:
+    sql: '"QUARTER"'
+
+  month:
+    sql: '"MONTH"'
+
+  month_name:
+    sql: '"MONTH_NAME"'
+
+  week_of_year:
+    sql: '"WEEK_OF_YEAR"'
+
+  day_of_week:
+    sql: '"DAY_OF_WEEK"'
+
+  is_weekend:
+    sql: '"IS_WEEKEND"'
+
+measures:
+  count:
+    aggregate_type: count

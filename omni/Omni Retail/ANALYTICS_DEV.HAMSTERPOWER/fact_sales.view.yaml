@@ -1,0 +1,48 @@
+# Reference this view as analytics_dev_hamsterpower__fact_sales
+catalog: ANALYTICS_DEV
+schema: HAMSTERPOWER
+table_name: FACT_SALES
+
+dimensions:
+  sale_id:
+    sql: '"SALE_ID"'
+    format: ID
+
+  customer_id:
+    sql: '"CUSTOMER_ID"'
+    format: ID
+
+  date_key:
+    sql: '"DATE_KEY"'
+
+  sale_date:
+    sql: '"SALE_DATE"'
+
+  plan:
+    sql: '"PLAN"'
+
+  mrr:
+    sql: '"MRR"'
+
+  arr:
+    sql: '"ARR"'
+
+  contract_length_months:
+    sql: '"CONTRACT_LENGTH_MONTHS"'
+
+  sale_type:
+    sql: '"SALE_TYPE"'
+
+  region:
+    sql: '"REGION"'
+
+  rep_employee_id:
+    sql: '"REP_EMPLOYEE_ID"'
+    format: ID
+
+  discount_pct:
+    sql: '"DISCOUNT_PCT"'
+
+measures:
+  count:
+    aggregate_type: count

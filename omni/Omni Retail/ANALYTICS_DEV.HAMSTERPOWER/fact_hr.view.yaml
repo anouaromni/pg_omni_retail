@@ -1,0 +1,41 @@
+# Reference this view as analytics_dev_hamsterpower__fact_hr
+catalog: ANALYTICS_DEV
+schema: HAMSTERPOWER
+table_name: FACT_HR
+
+dimensions:
+  hr_event_id:
+    sql: '"HR_EVENT_ID"'
+    format: ID
+
+  employee_id:
+    sql: '"EMPLOYEE_ID"'
+    format: ID
+
+  date_key:
+    sql: '"DATE_KEY"'
+
+  event_date:
+    sql: '"EVENT_DATE"'
+
+  event_type:
+    sql: '"EVENT_TYPE"'
+
+  department:
+    sql: '"DEPARTMENT"'
+
+  facility:
+    sql: '"FACILITY"'
+
+  salary_change:
+    sql: '"SALARY_CHANGE"'
+
+  performance_score:
+    sql: '"PERFORMANCE_SCORE"'
+
+  headcount_delta:
+    sql: '"HEADCOUNT_DELTA"'
+
+measures:
+  count:
+    aggregate_type: count

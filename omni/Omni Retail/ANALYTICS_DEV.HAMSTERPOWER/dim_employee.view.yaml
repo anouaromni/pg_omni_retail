@@ -1,0 +1,34 @@
+# Reference this view as analytics_dev_hamsterpower__dim_employee
+catalog: ANALYTICS_DEV
+schema: HAMSTERPOWER
+table_name: DIM_EMPLOYEE
+
+dimensions:
+  employee_id:
+    sql: '"EMPLOYEE_ID"'
+    format: ID
+
+  full_name:
+    sql: '"FULL_NAME"'
+
+  department:
+    sql: '"DEPARTMENT"'
+
+  role:
+    sql: '"ROLE"'
+
+  facility:
+    sql: '"FACILITY"'
+
+  start_date:
+    sql: '"START_DATE"'
+
+  salary:
+    sql: '"SALARY"'
+
+  is_active:
+    sql: '"IS_ACTIVE"'
+
+measures:
+  count:
+    aggregate_type: count
