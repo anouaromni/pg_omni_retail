@@ -44,10 +44,21 @@ dimensions:
 
   created_at:
     sql: '"CREATED_AT"'
+    description: When the user account was created (signup date). Distinct from
+      order dates in the order_items view.
 
   traffic_source:
     sql: '"TRAFFIC_SOURCE"'
+    label: Traffic Source
+    sample_values: [ Organic, Search, Email, Facebook, Display ]
+    synonyms: [ marketing channel, acquisition channel, channel ]
+    ai_context: Marketing channel that acquired the user.
 
 measures:
   count:
     aggregate_type: count
+
+ai_context: The buyer on an order. In the order_items topic, joined many-to-one
+  from order items — attributes describe the customer who placed the order.
+  Includes demographics (age, gender), geography (city, state, country, zip,
+  lat/long), and acquisition (traffic_source).

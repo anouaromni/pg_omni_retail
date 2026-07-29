@@ -11,21 +11,47 @@ dimensions:
 
   cost:
     sql: '"COST"'
+    label: Cost
+    format: currency_2
+    description: Product cost. Margin = sale price minus cost.
 
   category:
     sql: '"CATEGORY"'
+    label: Category
+    sample_values:
+      [
+        Accessories,
+        Active,
+        Dresses,
+        Jeans,
+        Intimates,
+        Outerwear & Coats,
+        Sleep & Lounge,
+        Shorts,
+        Skirts,
+        Pants
+      ]
+    ai_context: Product category. About 26 distinct values.
 
   name:
     sql: '"NAME"'
 
   brand:
     sql: '"BRAND"'
+    label: Brand
+    synonyms: [ manufacturer, label ]
 
   retail_price:
     sql: '"RETAIL_PRICE"'
+    label: Retail Price
+    format: currency_2
+    description: Product list (retail) price before discount. Sale price on the
+      order item is what was actually paid.
 
   department:
     sql: '"DEPARTMENT"'
+    label: Department
+    sample_values: [ Men, Women ]
 
   sku:
     sql: '"SKU"'
@@ -37,3 +63,8 @@ dimensions:
 measures:
   count:
     aggregate_type: count
+
+ai_context: Product catalog — one row per product. Joined to order items through
+  the inventory_items bridge. Use these fields (not the duplicate product_*
+  fields on inventory_items) for product attributes like category, brand, and
+  department.

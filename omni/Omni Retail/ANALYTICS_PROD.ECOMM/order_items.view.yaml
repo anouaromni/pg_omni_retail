@@ -23,9 +23,18 @@ dimensions:
 
   sale_price:
     sql: '"SALE_PRICE"'
+    label: Sale Price
+    format: currency_2
+    description: Actual price paid for this single line item. Sum with the Total
+      Sale Price measure for revenue; this raw field is per-item.
+    synonyms: [ price, unit price ]
 
   status:
     sql: '"STATUS"'
+    label: Status
+    sample_values: [ Complete, Shipped, Processing, Returned, Cancelled ]
+    ai_context: Line item fulfillment status. Exclude 'Cancelled' for realized
+      sales; treat 'Returned' separately for net-of-returns.
 
   created_at:
     sql: '"CREATED_AT"'
@@ -42,21 +51,35 @@ dimensions:
 
   is_returned:
     sql: '"IS_RETURNED"'
+    label: Is Returned
+    description: Boolean flag — true if this line item was returned.
 
   is_delivered:
     sql: '"IS_DELIVERED"'
+    label: Is Delivered
+    description: Boolean flag — true if this line item was delivered.
 
   is_shipped:
     sql: '"IS_SHIPPED"'
+    label: Is Shipped
+    description: Boolean flag — true if this line item has shipped.
 
   margin:
     sql: '"MARGIN"'
+    label: Margin
+    format: currency_2
+    description: Per-line-item profit (sale price minus cost). Sum with the Total
+      Margin measure for aggregate profit; this raw field is per-item.
 
   months_since_signup:
     sql: '"MONTHS_SINCE_SIGNUP"'
+    label: Months Since Signup
+    description: Number of months between the buyer's signup date and this order.
 
   time_to_ship:
     sql: '"TIME_TO_SHIP"'
+    label: Time to Ship
+    description: Elapsed time from order creation to shipment, in days.
 
   order_year:
     sql: CAST(EXTRACT(YEAR FROM ${created_at}) AS VARCHAR)
