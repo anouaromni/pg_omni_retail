@@ -1,12 +1,19 @@
 base_view: analytics_prod_ecomm__order_items
 
-# Excludes the calendar date-part dimensions from AI context while keeping them usable as UI filters.
+# Exclude calendar date-part dimensions and the duplicate product_* fields on the inventory_items bridge from AI context.
 ai_fields:
   [
     all_views.*,
     -analytics_prod_ecomm__order_items.order_year,
     -analytics_prod_ecomm__order_items.order_month,
-    -analytics_prod_ecomm__order_items.order_week_of_year
+    -analytics_prod_ecomm__order_items.order_week_of_year,
+    -analytics_prod_ecomm__inventory_items.product_category,
+    -analytics_prod_ecomm__inventory_items.product_name,
+    -analytics_prod_ecomm__inventory_items.product_brand,
+    -analytics_prod_ecomm__inventory_items.product_retail_price,
+    -analytics_prod_ecomm__inventory_items.product_department,
+    -analytics_prod_ecomm__inventory_items.product_sku,
+    -analytics_prod_ecomm__inventory_items.product_distribution_center_id
   ]
 access_filters:
   - field: analytics_prod_ecomm__products.brand
@@ -58,6 +65,6 @@ ai_context: |-
 
   `status` values: Complete, Shipped, Processing, Returned, Cancelled. Exclude Cancelled for realized sales; treat Returned separately for net-of-returns.
 
-  Joins: users (the buyer) and products (catalog, via the inventory_items bridge). inventory_items is a pass-through bridge — use products for product attributes.
+  Joins: users (the buyer) and products (catalog, via the inventory_items bridge). inventory_items is a pass-through bridge — always use products.* for product attributes, not the duplicate product_* fields on inventory_items.
 
-  For business-specific terms not inferable from this model (e.g. region codenames, internal conventions), search Notion first, then fall back to the modeled data.
+  Presentation: for single-step queries (one query answers the question), always propose a visualization of the result. For multi-step analyses (several dependent queries), a visualization is not required.
