@@ -1,2 +1,8 @@
+dynamic_shared_extensions:
+  - user_attribute: region
+    mappings:
+      eu:
+        values_for_model: [ EU ]
+
 # Exclude the Jaffle topic from the AI agent, dashboard assistant, and embedded chat
 ai_chat_topics: [ all_topics, -jaffle ]
