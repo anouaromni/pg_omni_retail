@@ -154,3 +154,12 @@ measures:
       price minus cost).
     aggregate_type: sum
     synonyms: [ profit, gross profit, margin dollars ]
+
+  margin_sum:
+    sql: ${analytics_prod_ecomm__order_items.margin}
+    label: Margin Sum
+    format: currency_2
+    description: "(Sum) Margin: Per-line-item profit (sale price minus cost). Sum
+      with the Total Margin measure for aggregate profit; this raw field is
+      per-item."
+    aggregate_type: sum

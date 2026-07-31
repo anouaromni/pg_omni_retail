@@ -70,6 +70,12 @@ dimensions:
     description: Intermediate filter dimension for measure food_revenue
     hidden: true
 
+  products_product_price_10:
+    sql: '"PRODUCTS.PRODUCT_PRICE*10"'
+
+  new_product_name:
+    sql: '"NEW_PRODUCT_NAME"'
+
 measures:
   count:
     aggregate_type: count
@@ -129,7 +135,7 @@ measures:
 #The info below was pulled from your dbt repository and is read-only.
 dbt:
   name: order_items
-  target_schema: ANI_PROD
+  target_schema: DBT_AHNINI
   description: Line-item fact table for ordered products, with product attributes,
     supply cost, and customer context.
   config:
