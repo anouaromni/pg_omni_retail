@@ -26,18 +26,22 @@ skills:
       - Give an exec summary and suggested focus for the week
   story_app_builder:
     label: Build a Story App
+    # NOTE: this input prompt is the COLD-START fallback only — see the
+    # INVOCATION CHECK in the description below. It is not shown automatically;
+    # it's shown only when that check determines the four inputs below aren't
+    # already available from context.
     input: "I'll build a scrollable, clickable story app for you. A few quick
       things: (1) which dataset or topic should it be built on? (2) what's the
       story you want it to tell — the narrative or the point you want to land?
       (3) what timeframe should the report cover — e.g. last quarter, this
-      fiscal year, trailing 12 months, or a specific date range? and (4) what
-      styling do you want — for example Executive Minimal (white, big KPI per
-      slide, lots of whitespace), Bold Editorial (dark background, oversized
-      headline numbers, one vivid accent), Brand Deck (your brand colors and
-      logo, color-blocked slides), Data Journalism (light, chart beside body
-      text with callouts), or Dashboard Dark (dark mode, neon/gradient accents,
-      KPI tiles). You can also paste or upload an image as styling inspiration
-      and I'll match its palette, type, and mood."
+      fiscal year, trailing 12 months, or a specific date range? and (4) any
+      styling preference — by default I'll pull your colors, type, and logo from
+      the 'Company Design' page in Notion, but you can instead ask for Executive
+      Minimal (white, big KPI per slide, lots of whitespace), Bold Editorial
+      (dark background, oversized headline numbers, one vivid accent), Data
+      Journalism (light, chart beside body text with callouts), or Dashboard
+      Dark (dark mode, neon/gradient accents, KPI tiles), or paste/upload an
+      image as styling inspiration and I'll match its palette, type, and mood."
     description: |-
       OPERATING CONTEXT
 
@@ -45,22 +49,31 @@ skills:
 
       AUDIENCE: This is for an EXECUTIVE-STYLE audience (C-suite, VPs, board). Design and write accordingly — lead with the headline number and the "so what," keep language crisp and decision-oriented, avoid jargon and operational minutiae, and make every slide readable in seconds. Favor big, confident type, clean visuals, and a clear point of view over dense detail. Frame findings around business impact and recommended action, not methodology.
 
-      BEFORE YOU BUILD — gather requirements (the input prompt already asks these; confirm answers before proceeding):
+      STYLING SOURCE — do this FIRST, before the Invocation Check, every time this skill fires: search Notion for a page called "Company Design" (fallback titles if not found: "Brand Guidelines", "Design System", "Brand Kit") to pull the company's colors, typography, and logo. Treat whatever you find as the default Brand Deck styling for this build. This lookup always runs — it isn't gated by whether the user specified a theme — but an explicit theme the user names (Executive Minimal, Bold Editorial, Data Journalism, Dashboard Dark) or an inspiration image they supply always overrides it. If no matching Notion page turns up, fall back to Executive Minimal and say in one line that no company design page was found.
+
+      INVOCATION CHECK — do this next, before anything else, every time this skill fires:
+
+      Look back through the current conversation (prior messages, attached files, a dataset already open or referenced, explicit instructions given earlier) for the four inputs: (1) dataset/topic, (2) narrative/point, (3) timeframe, (4) styling.
+
+      - DATASET/TOPIC IS CLEAR from context (this is the one input that can't be safely defaulted) → do NOT show the cold-start question prompt. Start building immediately:
+        - Narrative missing → infer a reasonable one from the data itself once queried, and state it back in one line as you begin (e.g. "Building this around the story that renewals are the growth bottleneck — let me know if you want a different angle").
+        - Timeframe missing → default to trailing 12 months, state the assumption in one line.
+        - Styling missing → use the Company Design result from the STYLING SOURCE step above (or the Executive Minimal fallback), state the assumption in one line.
+        - Anything explicitly given (even partially, e.g. "focus on APAC" or "make it dark") → honor it exactly; only default the parts left unspecified.
+        - Proceed straight into BUILD STEPS below. No confirmation turn, no waiting for a reply.
+      - DATASET/TOPIC IS NOT CLEAR (cold invocation — nothing in the conversation points to what data this should run on) → this is the only case where you stop and ask. Show the cold-start input prompt (the four questions) and wait for a reply before doing anything else. Do not guess a dataset.
+      - When in doubt about whether context "counts," err toward building: a named dataset, a mentioned metric/table, or a topic discussed earlier in the thread is enough to proceed with defaults filled in — it does not need to be a fully-specified brief.
+
+      BEFORE YOU BUILD — once the Invocation Check clears you to proceed (either because context was sufficient, or because the user has now answered the cold-start prompt), lock in:
       1. Dataset / topic to build on.
       2. The narrative — the argument or arc the story should make.
-      3. Timeframe — the reporting period the story should cover (e.g. last quarter, this fiscal year, trailing 12 months, or a specific date range). Apply this timeframe consistently as a date filter across EVERY slide's query so the whole deck reflects the same period. Where a slide shows a trend, use the timeframe as the window; where it shows a point-in-time KPI, honor its end. State the covered period on the title/hook slide. If the user doesn't specify, ask or pick a sensible default and say so.
-      4. Styling / theme. Offer these examples and let the user pick or riff:
-         - Executive Minimal: white background, one large KPI or chart per slide, thin sans-serif, generous whitespace, subtle grey accents.
-         - Bold Editorial: dark background, oversized headline numbers, a single vivid accent color, large chart, magazine-style captions.
-         - Brand Deck: company brand colors, logo lockup top-left, consistent color-blocked slides, footer with slide title.
-         - Data Journalism: light background, body text beside the chart, annotations/callouts on the chart, muted qualitative palette.
-         - Dashboard Dark: dark mode, neon/gradient accents, KPI tiles + trend lines, good for live-metrics storytelling.
-         ALSO tell the user they can provide an image as inspiration — an uploaded screenshot, brand asset, or reference design — and you'll derive the palette, typography feel, and overall mood from it.
+      3. Timeframe — the reporting period the story should cover (e.g. last quarter, this fiscal year, trailing 12 months, or a specific date range). Apply this timeframe consistently as a date filter across EVERY slide's query so the whole deck reflects the same period. Where a slide shows a trend, use the timeframe as the window; where it shows a point-in-time KPI, honor its end. State the covered period on the title/hook slide.
+      4. Styling / theme — one of Executive Minimal, Bold Editorial, Brand Deck, Data Journalism, Dashboard Dark, an inspiration image's derived palette/mood, or whatever default was applied per the Invocation Check.
 
       STORY FLOW (structure every deck this way — it must have a clear, deliberate flow):
       - Lead with the MOST IMPORTANT POINT. The very first content slide (after any title/hook) states the single biggest finding — the headline number and what it means — up front. Do not bury the lede or build up to it slowly; executives should get the punchline on slide one.
-      - Then follow a clear arc: (1) title/hook, (2) THE headline finding (most important point), (3) context / how we got here, (4) drivers / drill-down behind the finding, (5) implication, (6) recommendation / call to action.
-      - Every slide must earn its place by advancing the argument toward the recommendation. The flow should feel inevitable — each slide sets up the next.
+      - Then follow a tight arc that fits in 5 slides total: (1) title/hook, (2) THE headline finding (most important point) — fold in just enough context to explain how we got here, (3) drivers / drill-down behind the finding, (4) implication + recommendation combined into one call-to-action slide, (5) Key Takeaways.
+      - Every slide must earn its place by advancing the argument toward the recommendation. The flow should feel inevitable — each slide sets up the next. Merge rather than add: if a point doesn't carry unique weight, fold it into a neighboring slide instead of giving it its own.
       - "SO WHAT" FACTOR: every slide includes an explicit "so what" — a one-line statement of why this point matters to the business (impact, risk, or opportunity), not just what the data shows. Make it a distinct, visible element on the slide (e.g. a highlighted "So what:" line or callout beneath the visual).
       - KEY TAKEAWAYS: end the deck with a dedicated "Key Takeaways" slide — 3–5 crisp bullets summarizing the headline finding, the main drivers, the implication, and the recommended action, so a viewer who reads only that slide still gets the whole story.
 
@@ -69,21 +82,25 @@ skills:
       - Editable narrative text: wherever there is narrative — the slide headline, the supporting sentence, the "so what" line, captions, callouts, and the key takeaways — the viewer must be able to CLICK INTO that text and edit it directly (inline contenteditable). Clicking the narrative turns it into an editable field in place; clicking away commits the change. Make it visually discoverable (e.g. a subtle hover affordance or edit cursor) without cluttering the slide. This applies only to the prose/narrative, not to the data-driven values in the charts.
       - Progressive disclosure: after leading with the headline finding, reveal supporting detail slide by slide. Never show a point and its full breakdown on the same slide.
       - Two navigation modes, both always active: SCROLL — full-viewport slides with CSS scroll-snap, one slide per viewport; CLICK — next/prev arrows plus click-to-advance, with arrow-key and keyboard support too. Note: click-to-advance must not fire when the viewer is clicking into narrative text to edit it.
-      - Slide advancer pinned to the bottom of the viewport: a persistent progress indicator showing the current slide — a row of dots (filled = current), a segmented bar, and/or "3 / 8" text. It updates live as the viewer scrolls or clicks, and is clickable to jump to a slide.
+      - Slide advancer pinned to the bottom of the viewport: a persistent progress indicator showing the current slide — a row of dots (filled = current), a segmented bar, and/or "3 / 5" text. It updates live as the viewer scrolls or clicks, and is clickable to jump to a slide.
       - Prev/next slide THUMBNAILS: alongside the navigation, show small thumbnail previews of the previous and next slides (e.g. a miniature render or snapshot of each) flanking the current slide — a small "previous" thumbnail on the left and a small "next" thumbnail on the right. They give the viewer a peek at what came before and what's coming, and clicking a thumbnail navigates to that slide. Keep them subtle and small so they don't compete with the current slide; dim or hide the prev thumbnail on the first slide and the next thumbnail on the last.
       - Legible at a glance: large type, high contrast, minimal axis clutter, direct data labels over legends where possible.
       - Consistent chrome: same header/footer treatment, palette, and type scale on every slide so the viewer stays oriented.
       - Self-contained slides: each slide's chart is backed by its own query on the chosen dataset.
-      - Keep it tight: aim for 5–8 slides unless the user asks for more. A tight deck beats a long one — especially for an executive audience.
+      - Keep it tight: 5 slides max — title/hook, headline finding, drivers, implication/recommendation, Key Takeaways — unless the user explicitly asks for more. 5 is a ceiling, not a target; merge adjacent points rather than padding out to it. A tight deck beats a long one — especially for an executive audience.
 
       BUILD STEPS:
-      1. Confirm the requirements above (dataset, narrative, timeframe, styling — including any inspiration image).
-      2. Look up the chosen topic's fields, then generate ONE query per slide, each answering that slide's single point (headline finding, context, drivers/breakdown, implication metric, etc.). Apply the chosen timeframe as a consistent date filter on every query.
+      1. Run the STYLING SOURCE lookup (search Notion for "Company Design") and the INVOCATION CHECK. If context is sufficient, lock in the four requirements (using the Notion-derived styling, and defaults + stated assumptions for any other gaps) and proceed immediately — no confirmation turn. If the dataset/topic itself is unclear, show the cold-start prompt and stop until the user replies.
+      2. Look up the chosen topic's fields, then generate ONE query per slide across the 5-slide arc (title/hook, headline finding, drivers, implication/recommendation, Key Takeaways), each answering that slide's single point. Apply the chosen timeframe as a consistent date filter on every query.
       3. Visualize each slide's query in the form that best carries its point: KPI for the headline finding, line/area for trends, bar for drivers, map for geography, funnel for stages.
-      4. Assemble the slides as a full-screen sequence with CSS scroll-snap for scroll navigation, click + keyboard handlers for click navigation, the fixed bottom slide advancer (dots/segments + "N / total") with prev/next slide thumbnails that both reflect and control the current slide, inline-editable narrative text on every slide, a "so what" line on every slide, and a closing Key Takeaways slide.
-      5. Apply the chosen theme's palette, typography, and chrome consistently across every slide. If an inspiration image was provided, derive the palette and mood from it.
+      4. Assemble the slides as a full-screen sequence with CSS scroll-snap for scroll navigation, click + keyboard handlers for click navigation, the fixed bottom slide advancer (dots/segments + "N / 5") with prev/next slide thumbnails that both reflect and control the current slide, inline-editable narrative text on every slide, a "so what" line on every slide, and a closing Key Takeaways slide.
+      5. Apply the chosen theme's palette, typography, and chrome consistently across every slide — using the Notion "Company Design" colors/type/logo by default, an explicit user-named theme, or a supplied inspiration image, in that order of precedence.
 
       SUCCESS CRITERIA:
+      - Notion was searched for "Company Design" (or a fallback brand page) before styling was finalized, and its colors/type/logo were used unless the user named a different theme or supplied their own inspiration image.
+      - The deck is 5 slides max — title/hook, headline finding, drivers, implication/recommendation, Key Takeaways — with adjacent points merged rather than padded out to fill more slides.
+      - The Invocation Check correctly skipped the question turn whenever the dataset/topic was already established in conversation, and only asked when it was genuinely a cold start.
+      - Any default applied in place of a missing narrative/timeframe/styling was stated in one line, not silently assumed.
       - The deck has a clear flow that leads with the most important point and builds inevitably toward the recommendation.
       - Every slide's data honors the chosen timeframe consistently, and the covered period is stated on the title slide.
       - Every slide has an explicit "so what" factor, and the deck ends with a Key Takeaways slide.
@@ -91,5 +108,5 @@ skills:
       - A bottom slide advancer is always visible and accurately shows the current slide, with small prev/next slide thumbnails flanking it.
       - All narrative text is click-to-edit inline, without interfering with click-to-advance navigation.
       - Each slide makes exactly one clear point and the slides read as a coherent, executive-ready narrative.
-      - Styling is consistent and matches the user's chosen theme or inspiration image.
+      - Styling is consistent and matches the user's chosen theme, inspiration image, or stated default.
       - Every slide's visual is backed by a real query on the chosen dataset.
