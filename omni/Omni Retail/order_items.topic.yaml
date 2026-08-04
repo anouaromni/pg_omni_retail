@@ -58,6 +58,19 @@ views:
         format: percent_2
         description: Total discount as a share of total list price.
 
+      avg_days_to_ship:
+        sql: ${time_to_ship}
+        label: Avg Days to Ship
+        format: number_2
+        description: Average elapsed days from order creation to shipment. Scoped to
+          shipped line items only (is_shipped is true) — unshipped items have no
+          ship date and are excluded rather than silently averaged in as zero.
+        aggregate_type: average
+        filters:
+          is_shipped:
+            is: true
+        synonyms: [ shipping time, time to ship, days to ship ]
+
   analytics_prod_ecomm__users:
     measures:
       arpu:
@@ -69,12 +82,145 @@ views:
         synonyms: [ average revenue per user, revenue per user ]
 
 ai_context: |-
-  Omni Retail order line items — one row per item within an order (grain = line item).
+  Omni Retail order line items — one row per item within an order (grain = line
+  item, not order). A single order with 3 products is 3 rows sharing the same
+  order_id.
 
-  Metrics: `count` = items sold; `order_count` = distinct orders; `total_sale_price` = realized revenue; `total_margin` = profit. Prefer these over ad-hoc sums.
+  Counting: use `count` for line items, `order_count` (count_distinct of
+  order_id) for distinct orders — never `count` when the user asks "how many
+  orders". Any per-order aggregate (e.g. average order value) must roll up to
+  order_id first — averaging sale_price directly computes an average line-item
+  value, not an average order value.
 
-  `status` values: Complete, Shipped, Processing, Returned, Cancelled. Exclude Cancelled for realized sales; treat Returned separately for net-of-returns.
+  Revenue: `total_sale_price` = SUM(sale_price) = actual dollars collected.
+  Cancelled line items never collected payment, so add a status is_not Cancelled
+  filter whenever the question is about realized/collected revenue — the
+  exclusion is not baked into the measure itself. Do not exclude Returned from
+  revenue — a return is a completed sale that came back; report it separately
+  (net-of-returns) rather than folding it silently out of gross revenue.
 
-  Joins: users (the buyer) and products (catalog, via the inventory_items bridge). inventory_items is a pass-through bridge — always use products.* for product attributes, not the duplicate product_* fields on inventory_items.
+  Margin/profit: `total_margin` = SUM(margin), where margin = sale_price minus
+  the product's cost (products.cost). Never substitute products.retail_price
+  for cost — retail_price is list price, not cost, and can drift from it.
 
-  Presentation: for single-step queries (one query answers the question), always propose a visualization of the result. For multi-step analyses (several dependent queries), a visualization is not required.
+  Discount: `total_discount` = SUM(products.retail_price) - SUM(sale_price);
+  `discount_rate` = total_discount / total_list_price — both already aggregated
+  as ratios of sums. Never average a per-row discount rate; that weights every
+  line item equally regardless of price and skews toward cheap items.
+
+  Shipping performance: `avg_days_to_ship` (days from created_at to shipped_at)
+  is already scoped to shipped items only (is_shipped is true) — no need to add
+  that filter yourself when using this measure.
+
+  New vs. tenured buyers: `months_since_signup` = months between the buyer's
+  signup (users.created_at) and this order (order_items.created_at) — two
+  different created_at fields on two different views. Don't confuse "when they
+  signed up" with "when they ordered".
+
+  `status` values: Complete, Shipped, Processing, Returned, Cancelled. Cancelled
+  → excluded from revenue (never collected payment). Returned → revenue was
+  collected then reversed; report separately when asked about "net" or "actual
+  retained" sales, don't silently merge it into Complete. Complete / Shipped /
+  Processing all represent collected revenue at different fulfillment points —
+  sum them together for "in-flight or completed" totals.
+
+  Booleans vs. timestamps: use `is_shipped` / `is_delivered` / `is_returned` for
+  filtering ("show me shipped orders"); use `shipped_at` / `delivered_at` /
+  `returned_at` for elapsed-time or recency calculations.
+
+  Row-level security: brand access is already enforced automatically by this
+  topic's access_filters (products.brand) — never add a manual brand filter,
+  it's handled for you on every query.
+
+  Joins: users (the buyer) and products (catalog, via the inventory_items
+  bridge). inventory_items is a pass-through bridge — always use products.* for
+  product attributes, not the duplicate product_* fields on inventory_items
+  (product_name, product_brand, product_category, product_department,
+  product_sku, product_retail_price, product_distribution_center_id), which are
+  denormalized snapshots that can go stale.
+
+  Presentation: for single-step queries (one query answers the question), always
+  propose a visualization of the result. For multi-step analyses (several
+  dependent queries), a visualization is not required.
+
+sample_queries:
+  revenue_by_month_last_year:
+    query:
+      fields:
+        [
+          "analytics_prod_ecomm__order_items.created_at[month]",
+          analytics_prod_ecomm__order_items.total_sale_price
+        ]
+      base_view: analytics_prod_ecomm__order_items
+      limit: 500
+      sorts:
+        - field: analytics_prod_ecomm__order_items.created_at[month]
+      topic: order_items
+    description: Realized revenue by order month. total_sale_price does not exclude
+      Cancelled on its own — always add a status is_not Cancelled filter
+      (Cancelled line items never collected payment), and restrict created_at to
+      the trailing 12 months.
+    prompt: What was revenue by month last year?
+    ai_context: Revenue-over-time question. Always pair total_sale_price with a
+      status is_not Cancelled filter — it is not baked into the measure. Do not
+      exclude Returned — that is a separate net-of-returns figure, not a gross
+      revenue exclusion.
+  margin_by_product_category:
+    query:
+      fields:
+        [
+          analytics_prod_ecomm__products.category,
+          analytics_prod_ecomm__order_items.total_margin
+        ]
+      base_view: analytics_prod_ecomm__order_items
+      limit: 500
+      sorts:
+        - field: analytics_prod_ecomm__order_items.total_margin
+          desc: true
+      topic: order_items
+    description: Total margin (profit = sale price minus product cost) rolled up by
+      product category, joined through products via the inventory_items bridge.
+    prompt: Which product categories have the highest margin?
+  orders_vs_line_items_last_week:
+    query:
+      fields:
+        [
+          analytics_prod_ecomm__order_items.order_count,
+          analytics_prod_ecomm__order_items.count
+        ]
+      base_view: analytics_prod_ecomm__order_items
+      limit: 500
+      topic: order_items
+    description: order_count (count_distinct of order_id) is the number of orders;
+      count (all line items) is the number of line items — the same rows produce
+      two different, both-correct numbers. Filter created_at to the trailing 7
+      days.
+    prompt: How many distinct orders did we have last week, and how many line items?
+    ai_context: Never use count when the question asks "how many orders" — an order
+      with 3 products is 3 line-item rows. Use order_count for orders, count for
+      line items.
+  avg_time_to_ship_for_shipped_orders:
+    query:
+      fields: [ analytics_prod_ecomm__order_items.avg_days_to_ship ]
+      base_view: analytics_prod_ecomm__order_items
+      limit: 500
+      topic: order_items
+    description: Average elapsed days from order creation to shipment. The
+      is_shipped is true filter is already baked into the avg_days_to_ship
+      measure, so unshipped items are excluded automatically — no extra filter
+      needed.
+    prompt: What's our average time to ship, for shipped orders?
+  discount_rate_overall:
+    query:
+      fields: [ analytics_prod_ecomm__order_items.discount_rate ]
+      base_view: analytics_prod_ecomm__order_items
+      limit: 500
+      topic: order_items
+    description: Aggregate discount rate = total_discount / total_list_price, a
+      ratio of sums — not an average of per-row discount percentages, which
+      would weight every line item equally regardless of price and skew toward
+      cheap items. Add a status is_not Cancelled filter to match the
+      realized-sales business definition.
+    prompt: What share of list price do we give away in discounts?
+    ai_context: discount_rate is already a ratio-of-sums measure — never compute it
+      by averaging a per-row discount percentage.
