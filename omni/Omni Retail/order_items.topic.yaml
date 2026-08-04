@@ -58,6 +58,16 @@ views:
         format: percent_2
         description: Total discount as a share of total list price.
 
+  analytics_prod_ecomm__users:
+    measures:
+      arpu:
+        sql: ${analytics_prod_ecomm__order_items.total_sale_price} / NULLIF(${count}, 0)
+        label: ARPU
+        format: currency_2
+        description: Average revenue per user — total realized revenue (sum of order
+          line item sale price) divided by distinct user count.
+        synonyms: [ average revenue per user, revenue per user ]
+
 ai_context: |-
   Omni Retail order line items — one row per item within an order (grain = line item).
 
