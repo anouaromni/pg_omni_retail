@@ -45,3 +45,4 @@ dbt:
     )
 
     select * from supplies
+  referenced_by: [ supply_cost_summary ]

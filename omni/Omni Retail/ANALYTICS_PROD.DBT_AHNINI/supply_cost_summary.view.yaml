@@ -1,0 +1,20 @@
+# Reference this view as analytics_prod_dbt_ahnini__supply_cost_summary
+catalog: ANALYTICS_PROD
+schema: DBT_AHNINI
+table_name: SUPPLY_COST_SUMMARY
+
+dimensions:
+  supply_cost_summary_id:
+    sql: '"SUPPLY_COST_SUMMARY_ID"'
+    format: ID
+    primary_key: true
+
+  reporting_date:
+    sql: '"REPORTING_DATE"'
+
+  total_supply_cost:
+    sql: '"TOTAL_SUPPLY_COST"'
+
+measures:
+  count:
+    aggregate_type: count
