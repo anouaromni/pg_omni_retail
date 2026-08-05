@@ -31,7 +31,7 @@ views:
       discount_amount:
         sql: ${analytics_prod_ecomm__products.retail_price} -
           ${analytics_prod_ecomm__order_items.sale_price}
-        label: Discount Amount
+        label: Discount Amount 2
         format: currency_2
         description: Difference between the product's list price and the actual sale
           price for this line item.
