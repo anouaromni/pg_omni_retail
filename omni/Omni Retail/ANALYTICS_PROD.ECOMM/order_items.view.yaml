@@ -154,3 +154,24 @@ measures:
       price minus cost).
     aggregate_type: sum
     synonyms: [ profit, gross profit, margin dollars ]
+
+  count_id:
+    sql: ${analytics_prod_ecomm__order_items.id}
+    aggregate_type: count_distinct
+    filters:
+      is_returned:
+        is: true
+
+  return_rate:
+    sql: CASE WHEN ${analytics_prod_ecomm__order_items.count} = 0 THEN NULL ELSE
+      COALESCE(${analytics_prod_ecomm__order_items.count_id}, 0) /
+      ${analytics_prod_ecomm__order_items.count} END
+    label: Return Rate
+    format: PERCENT_2
+
+  return_rate_1:
+    sql: CASE WHEN ${analytics_prod_ecomm__order_items.count} = 0 THEN NULL ELSE
+      COALESCE(${analytics_prod_ecomm__order_items.count_id}, 0) /
+      ${analytics_prod_ecomm__order_items.count} END
+    label: Return Rate
+    format: PERCENT_2
