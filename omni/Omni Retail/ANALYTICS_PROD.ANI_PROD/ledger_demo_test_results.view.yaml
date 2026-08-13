@@ -1,0 +1,22 @@
+# Reference this view as analytics_prod_ani_prod__ledger_demo_test_results
+catalog: ANALYTICS_PROD
+schema: ANI_PROD
+table_name: LEDGER_DEMO_TEST_RESULTS
+
+dimensions:
+  test_name:
+    sql: '"TEST_NAME"'
+
+  passed:
+    sql: '"PASSED"'
+
+  evaluated_at:
+    sql: '"EVALUATED_AT"'
+
+  invocation_id:
+    sql: '"INVOCATION_ID"'
+    format: ID
+
+measures:
+  count:
+    aggregate_type: count

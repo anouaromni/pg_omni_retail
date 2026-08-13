@@ -1,0 +1,23 @@
+# Reference this view as omni_dbt__ledger_demo_test_results
+schema_label: ""
+
+schema: omni_dbt
+table_name: LEDGER_DEMO_TEST_RESULTS
+
+dimensions:
+  test_name:
+    sql: '"TEST_NAME"'
+
+  passed:
+    sql: '"PASSED"'
+
+  evaluated_at:
+    sql: '"EVALUATED_AT"'
+
+  invocation_id:
+    sql: '"INVOCATION_ID"'
+    format: ID
+
+measures:
+  count:
+    aggregate_type: count
