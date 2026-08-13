@@ -1,0 +1,11 @@
+base_view: omni_dbt__ledger_demo_test_results
+label: Ledger Newsletter
+description: dbt test results for the ledger demo — one row per test evaluation,
+  with pass/fail status, evaluation timestamp, and dbt invocation id.
+
+joins: {}
+
+ai_context: One row per dbt test evaluation. Use `passed` to filter to failing
+  tests (false) or passing tests (true), `evaluated_at` for recency/trending,
+  `invocation_id` to group tests from the same dbt run, and `count` for volume
+  of test evaluations.
