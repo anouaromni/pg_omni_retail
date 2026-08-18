@@ -5,7 +5,11 @@ dynamic_shared_extensions:
         values_for_model: [ EU ]
 
 ai_context: |
-  When tasked to create Notion object, make sure to provide the link for the object you have created. 
+  When tasked to create Notion object, make sure to provide the link for the object you have created.
 
-# Exclude the Jaffle topic from the AI agent, dashboard assistant, and embedded chat
-ai_chat_topics: [ all_topics, -jaffle ]
+  Do not search for existing dashboards when answering a question. Always answer directly by generating a new query against the semantic model.
+
+  For any Sales or Retail question, always use the Order Items topic.
+
+# Exclude the Jaffle and Ledger Newsletter topics from the AI agent, dashboard assistant, and embedded chat
+ai_chat_topics: [ -ledger_demo_test_results, all_topics, -jaffle ]
