@@ -126,6 +126,13 @@ measures:
     description: Distinct customers who purchased an order item.
     aggregate_type: count_distinct
 
+  distinct_product_count:
+    # Measure is defined by the 'distinct_product_count' dbt metric (models/marts/order_items.yml)
+    sql: ${omni_dbt__order_items.product_id}
+    label: Distinct Product Count
+    description: demo somfy
+    aggregate_type: count_distinct
+
 #The info below was pulled from your dbt repository and is read-only.
 dbt:
   name: order_items
