@@ -33,8 +33,8 @@ views:
           ${analytics_prod_ecomm__order_items.sale_price}
         label: Discount Amount
         format: currency_2
-        description: Difference between the product's list price and the actual sale
-          price for this line item.
+        description: Change between the product's list price and the actual sale price
+          for this line item.
 
     measures:
       total_list_price:
