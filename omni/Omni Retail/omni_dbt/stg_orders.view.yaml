@@ -49,7 +49,7 @@ measures:
 #The info below was pulled from your dbt repository and is read-only.
 dbt:
   name: stg_orders
-  target_schema: ANI_PROD
+  target_schema: DBT_AHNINI
   description: Order data with basic cleaning and transformation applied, one row per order.
   config:
     materialized: view

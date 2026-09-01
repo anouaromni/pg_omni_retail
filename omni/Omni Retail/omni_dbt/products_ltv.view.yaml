@@ -38,7 +38,7 @@ measures:
 #The info below was pulled from your dbt repository and is read-only.
 dbt:
   name: products_ltv
-  target_schema: ANI_PROD
+  target_schema: DBT_AHNINI
   description: |
     Product lifetime value mart with one row per product. This model summarizes all historical order items to show each product's lifetime gross revenue, lifetime gross profit, and total supply cost, making it the primary mart for analyzing product-level LTV and long-run product profitability.
   config:
