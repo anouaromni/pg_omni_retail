@@ -73,6 +73,9 @@ dimensions:
   new_column:
     sql: '"NEW_COLUMN"'
 
+  gross_rev:
+    sql: '"GROSS_REV"'
+
 measures:
   count:
     aggregate_type: count
