@@ -1,4 +1,7 @@
 # Reference this view as analytics_prod_dbt_ahnini__ledger_demo_test_results
+#This description was pulled from dbt.
+description: Append-only audit history of randomized ledger data-test outcomes.
+
 catalog: ANALYTICS_PROD
 schema: DBT_AHNINI
 table_name: LEDGER_DEMO_TEST_RESULTS
@@ -6,17 +9,53 @@ table_name: LEDGER_DEMO_TEST_RESULTS
 dimensions:
   test_name:
     sql: '"TEST_NAME"'
+    #This description was pulled from dbt.
+    description: Name of the singular ledger data test.
 
   passed:
     sql: '"PASSED"'
+    #This description was pulled from dbt.
+    description: Test outcome, where 1 represents passed and 0 represents failed.
+    all_values: [ "0", "1" ]
 
   evaluated_at:
     sql: '"EVALUATED_AT"'
+    #This description was pulled from dbt.
+    description: Timestamp at which the randomized result was generated.
 
   invocation_id:
     sql: '"INVOCATION_ID"'
     format: ID
+    #This description was pulled from dbt.
+    description: dbt invocation ID for this recorded test result.
 
 measures:
   count:
     aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: ledger_demo_test_results
+  target_schema: DBT_AHNINI
+  description: Append-only audit history of randomized ledger data-test outcomes.
+  config:
+    materialized: incremental
+  code: |-
+    {{ config(
+        materialized='incremental',
+        unique_key=['test_name', 'invocation_id']
+    ) }}
+
+    with demo_tests as (
+        select 'ledger_revenue_kpi' as test_name union all
+        select 'ledger_price_per_item_kpi' union all
+        select 'ledger_return_rate_kpi' union all
+        select 'ledger_first_time_buyers'
+    )
+
+    select
+        test_name,
+        uniform(0, 1, random()) as passed,
+        current_timestamp() as evaluated_at,
+        '{{ invocation_id }}' as invocation_id
+    from demo_tests

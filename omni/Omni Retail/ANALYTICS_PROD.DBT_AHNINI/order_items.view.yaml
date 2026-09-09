@@ -131,6 +131,13 @@ measures:
     description: Distinct customers who purchased an order item.
     aggregate_type: count_distinct
 
+  distinct_product_count:
+    # Measure is defined by the 'distinct_product_count' dbt metric (models/marts/order_items.yml)
+    sql: ${product_id}
+    label: Distinct Product Count
+    description: demo somfy
+    aggregate_type: count_distinct
+
 #The info below was pulled from your dbt repository and is read-only.
 dbt:
   name: order_items
@@ -189,11 +196,12 @@ dbt:
             orders.order_date,
 
             products.product_name,
-            products.product_price,
+            products.product_price*0.7 as product_price,
             products.is_food_item,
             products.is_drink_item,
 
-            order_supplies_summary.supply_cost
+            order_supplies_summary.supply_cost,
+            products.product_price - order_supplies_summary.supply_cost as gross_rev
 
         from order_items
 

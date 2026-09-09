@@ -26,7 +26,7 @@ measures:
 #The info below was pulled from your dbt repository and is read-only.
 dbt:
   name: raw_stores
-  target_schema: ANI_PROD
+  target_schema: DBT_AHNINI
   config:
     schema: raw
     materialized: seed

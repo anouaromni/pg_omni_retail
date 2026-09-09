@@ -70,6 +70,9 @@ dimensions:
     description: Intermediate filter dimension for measure food_revenue
     hidden: true
 
+  gross_rev:
+    sql: '"GROSS_REV"'
+
 measures:
   count:
     aggregate_type: count
@@ -136,7 +139,7 @@ measures:
 #The info below was pulled from your dbt repository and is read-only.
 dbt:
   name: order_items
-  target_schema: ANI_PROD
+  target_schema: DBT_AHNINI
   description: Line-item fact table for ordered products, with product attributes,
     supply cost, and customer context.
   config:
@@ -191,11 +194,12 @@ dbt:
             orders.order_date,
 
             products.product_name,
-            products.product_price,
+            products.product_price*0.7 as product_price,
             products.is_food_item,
             products.is_drink_item,
 
-            order_supplies_summary.supply_cost
+            order_supplies_summary.supply_cost,
+            products.product_price - order_supplies_summary.supply_cost as gross_rev
 
         from order_items
 

@@ -87,7 +87,7 @@ measures:
 #The info below was pulled from your dbt repository and is read-only.
 dbt:
   name: orders
-  target_schema: ANI_PROD
+  target_schema: DBT_AHNINI
   description: Order overview data mart, offering key details for each order
     inlcluding if it's a customer's first order and a food vs. drink item
     breakdown. One row per order.

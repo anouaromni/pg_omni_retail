@@ -36,7 +36,7 @@ measures:
 #The info below was pulled from your dbt repository and is read-only.
 dbt:
   name: ledger_demo_test_results
-  target_schema: ANI_PROD
+  target_schema: DBT_AHNINI
   description: Append-only audit history of randomized ledger data-test outcomes.
   config:
     materialized: incremental
