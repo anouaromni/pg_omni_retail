@@ -70,9 +70,6 @@ dimensions:
     description: Intermediate filter dimension for measure food_revenue
     hidden: true
 
-  new_column:
-    sql: '"NEW_COLUMN"'
-
   gross_rev:
     sql: '"GROSS_REV"'
 
