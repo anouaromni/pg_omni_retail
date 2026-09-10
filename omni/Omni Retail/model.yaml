@@ -11,5 +11,7 @@ ai_context: |
 
   For any Sales or Retail question, always use the Order Items topic.
 
+week_start_day: Sunday
+
 # Exclude the Jaffle and Ledger Newsletter topics from the AI agent, dashboard assistant, and embedded chat
 ai_chat_topics: [ -ledger_demo_test_results, all_topics, -jaffle ]
