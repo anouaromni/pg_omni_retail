@@ -175,3 +175,10 @@ measures:
       ${analytics_prod_ecomm__order_items.count} END
     label: Return Rate
     format: PERCENT_2
+
+  time_to_ship_sum:
+    sql: ${analytics_prod_ecomm__order_items.time_to_ship}
+    label: Time to Ship Sum
+    description: "(Sum) Time to Ship: Elapsed time from order creation to shipment,
+      in days."
+    aggregate_type: sum
