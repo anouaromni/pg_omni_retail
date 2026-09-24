@@ -6,6 +6,7 @@ description: Example fact table exposing the order_items mart under the fct_
 
 schema: omni_dbt
 table_name: FCT_EXAMPLE
+extends: [ shared_fct_example ]
 
 dimensions:
   order_item_id:
