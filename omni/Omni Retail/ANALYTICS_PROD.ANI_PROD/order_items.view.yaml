@@ -208,4 +208,4 @@ dbt:
     )
 
     select * from joined
-  referenced_by: [ orders, products_ltv ]
+  referenced_by: [ fct_example, orders, products_ltv ]
