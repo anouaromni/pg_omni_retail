@@ -1,0 +1,7 @@
+base_view: analytics_prod_ecomm__daily_sales
+label: Daily Sales
+description: Pre-aggregated daily sales mart (date x department x category x
+  brand x status x country x traffic source, Cancelled excluded). No
+  customer-level, product-level, shipping or city/state detail.
+
+joins: {}

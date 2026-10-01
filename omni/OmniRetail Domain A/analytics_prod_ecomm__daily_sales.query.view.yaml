@@ -1,0 +1,235 @@
+# Reference this view as analytics_prod_ecomm__daily_sales
+label: Daily Sales
+description: "Pre-aggregated daily sales mart: one row per order date x
+  department x category x brand x status x country x traffic source (Cancelled
+  excluded). Built to contrast with the line-item Order Items topic."
+
+sql: |-
+  SELECT
+    CAST(oi.created_at AS DATE) AS order_date,
+    p.department AS department,
+    p.category AS category,
+    p.brand AS brand,
+    oi.status AS status,
+    u.country AS country,
+    u.traffic_source AS traffic_source,
+    COUNT(DISTINCT oi.order_id) AS orders,
+    COUNT(oi.id) AS items_sold,
+    COUNT(DISTINCT oi.user_id) AS buyers,
+    SUM(oi.sale_price) AS sales,
+    SUM(oi.sale_price - p.cost) AS margin,
+    SUM(p.retail_price) AS list_price,
+    SUM(p.cost) AS cost,
+    AVG(oi.sale_price) AS avg_item_price,
+    (SUM(p.retail_price) - SUM(oi.sale_price)) / NULLIF(SUM(p.retail_price), 0) AS daily_discount_rate
+  FROM ${analytics_prod_ecomm__order_items} oi
+  LEFT JOIN ${analytics_prod_ecomm__inventory_items} ii ON oi.inventory_item_id = ii.id
+  LEFT JOIN ${analytics_prod_ecomm__products} p ON ii.product_id = p.id
+  LEFT JOIN ${analytics_prod_ecomm__users} u ON oi.user_id = u.id
+  WHERE oi.status <> 'Cancelled'
+  GROUP BY 1, 2, 3, 4, 5, 6, 7
+
+dimensions:
+  order_date:
+    sql: '"ORDER_DATE"'
+    label: Order Date
+    timeframes: [ date, week, month, quarter, year ]
+
+  department:
+    sql: '"DEPARTMENT"'
+    label: Department
+
+  category:
+    sql: '"CATEGORY"'
+    label: Category
+
+  orders:
+    sql: '"ORDERS"'
+    hidden: true
+
+  items_sold:
+    sql: '"ITEMS_SOLD"'
+    hidden: true
+
+  buyers:
+    sql: '"BUYERS"'
+    hidden: true
+
+  sales:
+    sql: '"SALES"'
+    hidden: true
+
+  margin:
+    sql: '"MARGIN"'
+    hidden: true
+
+  list_price:
+    sql: '"LIST_PRICE"'
+    hidden: true
+
+  avg_item_price:
+    sql: '"AVG_ITEM_PRICE"'
+    label: Daily Avg Item Price
+    hidden: true
+
+  brand:
+    sql: '"BRAND"'
+    label: Brand
+
+  status:
+    sql: '"STATUS"'
+    label: Status
+    description: Complete, Shipped, Processing, Returned (Cancelled excluded upstream).
+
+  country:
+    sql: '"COUNTRY"'
+    label: Country
+
+  traffic_source:
+    sql: '"TRAFFIC_SOURCE"'
+    label: Traffic Source
+
+  cost:
+    sql: '"COST"'
+    hidden: true
+
+  daily_discount_rate:
+    sql: '"DAILY_DISCOUNT_RATE"'
+    hidden: true
+
+measures:
+  total_orders:
+    sql: ${analytics_prod_ecomm__daily_sales.orders}
+    label: Total Orders
+    format: number_0
+    description: Sum of daily distinct order counts. Overcounts when an order spans
+      several categories — distinct counts don't re-aggregate.
+    aggregate_type: sum
+
+  total_items_sold:
+    sql: ${analytics_prod_ecomm__daily_sales.items_sold}
+    label: Items Sold
+    format: number_0
+    aggregate_type: sum
+
+  total_buyers:
+    sql: ${analytics_prod_ecomm__daily_sales.buyers}
+    label: Total Buyers
+    format: number_0
+    description: Sum of daily distinct buyers — overcounts repeat buyers across
+      days/categories.
+    aggregate_type: sum
+
+  total_sales:
+    sql: ${analytics_prod_ecomm__daily_sales.sales}
+    label: Total Sales
+    format: currency_2
+    aggregate_type: sum
+
+  total_margin:
+    sql: ${analytics_prod_ecomm__daily_sales.margin}
+    label: Total Margin
+    format: currency_2
+    aggregate_type: sum
+
+  average_item_price:
+    sql: ${analytics_prod_ecomm__daily_sales.avg_item_price}
+    label: Avg Item Price
+    format: currency_2
+    description: Average of daily averages — not weighted by volume, so it drifts
+      from the true average.
+    aggregate_type: average
+
+  total_list_price:
+    sql: ${analytics_prod_ecomm__daily_sales.list_price}
+    label: Total List Price
+    format: currency_2
+    aggregate_type: sum
+
+  total_cost:
+    sql: ${analytics_prod_ecomm__daily_sales.cost}
+    label: Total Cost
+    format: currency_2
+    aggregate_type: sum
+
+  total_discount:
+    sql: ${analytics_prod_ecomm__daily_sales.list_price} -
+      ${analytics_prod_ecomm__daily_sales.sales}
+    label: Total Discount
+    format: currency_2
+    aggregate_type: sum
+
+  discount_rate:
+    sql: (SUM(${analytics_prod_ecomm__daily_sales.list_price}) -
+      SUM(${analytics_prod_ecomm__daily_sales.sales})) /
+      NULLIF(SUM(${analytics_prod_ecomm__daily_sales.list_price}), 0)
+    label: Discount Rate
+    format: percent_1
+
+  avg_daily_discount_rate:
+    sql: ${analytics_prod_ecomm__daily_sales.daily_discount_rate}
+    label: Avg Daily Discount Rate
+    format: percent_1
+    description: Average of pre-computed per-row rates — unweighted, skews toward
+      small rows. Compare with Discount Rate.
+    aggregate_type: average
+
+  margin_pct:
+    sql: SUM(${analytics_prod_ecomm__daily_sales.margin}) /
+      NULLIF(SUM(${analytics_prod_ecomm__daily_sales.sales}), 0)
+    label: Margin %
+    format: percent_1
+
+  avg_order_value:
+    sql: SUM(${analytics_prod_ecomm__daily_sales.sales}) /
+      NULLIF(SUM(${analytics_prod_ecomm__daily_sales.orders}), 0)
+    label: Avg Order Value
+    format: currency_2
+    description: "Understated: the order count is inflated because orders are split
+      across rows."
+
+  items_per_order:
+    sql: SUM(${analytics_prod_ecomm__daily_sales.items_sold}) /
+      NULLIF(SUM(${analytics_prod_ecomm__daily_sales.orders}), 0)
+    label: Items per Order
+    format: number_2
+    description: Understated for the same reason as Avg Order Value.
+
+  sales_per_buyer:
+    sql: SUM(${analytics_prod_ecomm__daily_sales.sales}) /
+      NULLIF(SUM(${analytics_prod_ecomm__daily_sales.buyers}), 0)
+    label: Sales per Buyer
+    format: currency_2
+    description: "Understated: buyers are recounted on every day/row they appear."
+
+  returned_sales:
+    sql: CASE WHEN ${analytics_prod_ecomm__daily_sales.status} = 'Returned' THEN
+      ${analytics_prod_ecomm__daily_sales.sales} END
+    label: Returned Sales
+    format: currency_2
+    aggregate_type: sum
+
+  net_sales:
+    sql: CASE WHEN ${analytics_prod_ecomm__daily_sales.status} <> 'Returned' THEN
+      ${analytics_prod_ecomm__daily_sales.sales} END
+    label: Net Sales (excl. Returns)
+    format: currency_2
+    aggregate_type: sum
+
+  return_rate:
+    sql: SUM(CASE WHEN ${analytics_prod_ecomm__daily_sales.status} = 'Returned' THEN
+      ${analytics_prod_ecomm__daily_sales.items_sold} END) /
+      NULLIF(SUM(${analytics_prod_ecomm__daily_sales.items_sold}), 0)
+    label: Return Rate (Items)
+    format: percent_1
+
+custom_compound_primary_key_sql:
+  [
+    '"ORDER_DATE"',
+    '"DEPARTMENT"',
+    '"CATEGORY"',
+    '"BRAND"',
+    '"STATUS"',
+    '"COUNTRY"',
+    '"TRAFFIC_SOURCE"'
+  ]
