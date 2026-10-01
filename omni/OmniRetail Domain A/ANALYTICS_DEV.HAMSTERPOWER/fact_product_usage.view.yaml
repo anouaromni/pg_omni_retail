@@ -1,0 +1,48 @@
+# Reference this view as analytics_dev_hamsterpower__fact_product_usage
+catalog: ANALYTICS_DEV
+schema: HAMSTERPOWER
+table_name: FACT_PRODUCT_USAGE
+
+dimensions:
+  usage_id:
+    sql: '"USAGE_ID"'
+    format: ID
+
+  hamster_id:
+    sql: '"HAMSTER_ID"'
+    format: ID
+
+  customer_id:
+    sql: '"CUSTOMER_ID"'
+    format: ID
+
+  date_key:
+    sql: '"DATE_KEY"'
+
+  event_date:
+    sql: '"EVENT_DATE"'
+
+  facility:
+    sql: '"FACILITY"'
+
+  energy_kwh:
+    sql: '"ENERGY_KWH"'
+
+  session_minutes:
+    sql: '"SESSION_MINUTES"'
+
+  wheel_rpm:
+    sql: '"WHEEL_RPM"'
+
+  peak_speed_mph:
+    sql: '"PEAK_SPEED_MPH"'
+
+  treats_consumed:
+    sql: '"TREATS_CONSUMED"'
+
+  event_type:
+    sql: '"EVENT_TYPE"'
+
+measures:
+  count:
+    aggregate_type: count

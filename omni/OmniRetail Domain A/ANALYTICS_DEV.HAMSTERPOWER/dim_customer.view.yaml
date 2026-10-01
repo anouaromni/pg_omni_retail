@@ -1,0 +1,37 @@
+# Reference this view as analytics_dev_hamsterpower__dim_customer
+catalog: ANALYTICS_DEV
+schema: HAMSTERPOWER
+table_name: DIM_CUSTOMER
+
+dimensions:
+  customer_id:
+    sql: '"CUSTOMER_ID"'
+    format: ID
+
+  company_name:
+    sql: '"COMPANY_NAME"'
+
+  plan:
+    sql: '"PLAN"'
+
+  region:
+    sql: '"REGION"'
+
+  industry:
+    sql: '"INDUSTRY"'
+
+  assigned_facility:
+    sql: '"ASSIGNED_FACILITY"'
+
+  contract_start_date:
+    sql: '"CONTRACT_START_DATE"'
+
+  mrr:
+    sql: '"MRR"'
+
+  is_active:
+    sql: '"IS_ACTIVE"'
+
+measures:
+  count:
+    aggregate_type: count

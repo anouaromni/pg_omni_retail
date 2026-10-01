@@ -1,0 +1,48 @@
+# Reference this view as analytics_dev_hamsterpower__fact_support_tickets
+catalog: ANALYTICS_DEV
+schema: HAMSTERPOWER
+table_name: FACT_SUPPORT_TICKETS
+
+dimensions:
+  ticket_id:
+    sql: '"TICKET_ID"'
+    format: ID
+
+  customer_id:
+    sql: '"CUSTOMER_ID"'
+    format: ID
+
+  assigned_employee_id:
+    sql: '"ASSIGNED_EMPLOYEE_ID"'
+    format: ID
+
+  date_key:
+    sql: '"DATE_KEY"'
+
+  opened_date:
+    sql: '"OPENED_DATE"'
+
+  closed_date:
+    sql: '"CLOSED_DATE"'
+
+  category:
+    sql: '"CATEGORY"'
+
+  severity:
+    sql: '"SEVERITY"'
+
+  status:
+    sql: '"STATUS"'
+
+  resolution_days:
+    sql: '"RESOLUTION_DAYS"'
+
+  csat_score:
+    sql: '"CSAT_SCORE"'
+
+  hamster_involved:
+    sql: '"HAMSTER_INVOLVED"'
+
+measures:
+  count:
+    aggregate_type: count

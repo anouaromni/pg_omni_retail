@@ -1,0 +1,53 @@
+# Reference this view as analytics_dev_hamsterpower__fact_hamster_leaderboard
+catalog: ANALYTICS_DEV
+schema: HAMSTERPOWER
+table_name: FACT_HAMSTER_LEADERBOARD
+
+dimensions:
+  leaderboard_id:
+    sql: '"LEADERBOARD_ID"'
+    format: ID
+
+  hamster_id:
+    sql: '"HAMSTER_ID"'
+    format: ID
+
+  date_key:
+    sql: '"DATE_KEY"'
+
+  year:
+    sql: '"YEAR"'
+
+  month:
+    sql: '"MONTH"'
+
+  month_name:
+    sql: '"MONTH_NAME"'
+
+  total_energy_kwh:
+    sql: '"TOTAL_ENERGY_KWH"'
+
+  total_sessions:
+    sql: '"TOTAL_SESSIONS"'
+
+  avg_wheel_rpm:
+    sql: '"AVG_WHEEL_RPM"'
+
+  avg_session_minutes:
+    sql: '"AVG_SESSION_MINUTES"'
+
+  treats_consumed:
+    sql: '"TREATS_CONSUMED"'
+
+  uptime_pct:
+    sql: '"UPTIME_PCT"'
+
+  rank_in_facility:
+    sql: '"RANK_IN_FACILITY"'
+
+  gold_pellet_award:
+    sql: '"GOLD_PELLET_AWARD"'
+
+measures:
+  count:
+    aggregate_type: count

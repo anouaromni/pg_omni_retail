@@ -1,0 +1,37 @@
+# Reference this view as analytics_dev_hamsterpower__dim_hamster
+catalog: ANALYTICS_DEV
+schema: HAMSTERPOWER
+table_name: DIM_HAMSTER
+
+dimensions:
+  hamster_id:
+    sql: '"HAMSTER_ID"'
+    format: ID
+
+  hamster_name:
+    sql: '"HAMSTER_NAME"'
+
+  breed:
+    sql: '"BREED"'
+
+  facility:
+    sql: '"FACILITY"'
+
+  hire_date:
+    sql: '"HIRE_DATE"'
+
+  age_months:
+    sql: '"AGE_MONTHS"'
+
+  weight_grams:
+    sql: '"WEIGHT_GRAMS"'
+
+  wheel_size_cm:
+    sql: '"WHEEL_SIZE_CM"'
+
+  status:
+    sql: '"STATUS"'
+
+measures:
+  count:
+    aggregate_type: count

@@ -1,0 +1,47 @@
+# Reference this view as analytics_dev_hamsterpower__fact_finance
+catalog: ANALYTICS_DEV
+schema: HAMSTERPOWER
+table_name: FACT_FINANCE
+
+dimensions:
+  expense_id:
+    sql: '"EXPENSE_ID"'
+    format: ID
+
+  employee_id:
+    sql: '"EMPLOYEE_ID"'
+    format: ID
+
+  date_key:
+    sql: '"DATE_KEY"'
+
+  expense_date:
+    sql: '"EXPENSE_DATE"'
+
+  category:
+    sql: '"CATEGORY"'
+
+  department:
+    sql: '"DEPARTMENT"'
+
+  facility:
+    sql: '"FACILITY"'
+
+  budget_amount:
+    sql: '"BUDGET_AMOUNT"'
+
+  actual_amount:
+    sql: '"ACTUAL_AMOUNT"'
+
+  variance:
+    sql: '"VARIANCE"'
+
+  approved:
+    sql: '"APPROVED"'
+
+  payment_method:
+    sql: '"PAYMENT_METHOD"'
+
+measures:
+  count:
+    aggregate_type: count

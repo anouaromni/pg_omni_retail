@@ -1,0 +1,42 @@
+# Reference this view as analytics_prod_dbt_ahnini_raw__raw_orders
+catalog: ANALYTICS_PROD
+schema: DBT_AHNINI_RAW
+table_name: RAW_ORDERS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  customer:
+    sql: '"CUSTOMER"'
+
+  ordered_at:
+    sql: '"ORDERED_AT"'
+
+  store_id:
+    sql: '"STORE_ID"'
+    format: ID
+
+  subtotal:
+    sql: '"SUBTOTAL"'
+
+  tax_paid:
+    sql: '"TAX_PAID"'
+
+  order_total:
+    sql: '"ORDER_TOTAL"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: raw_orders
+  target_schema: DBT_AHNINI
+  config:
+    schema: raw
+    materialized: seed
+  referenced_by: [ stg_orders ]

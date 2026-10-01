@@ -1,0 +1,15 @@
+base_view: omni_dbt__order_items
+label: Jaffle
+description: Jaffle Shop order line items joined to customers and products. One
+  row per order item.
+
+joins:
+  omni_dbt__customers: {}
+  omni_dbt__products: {}
+
+ai_context: |-
+  This topic covers the Jaffle Shop dataset (dbt_ahnini schema): order items, customers, and products for a cafe/restaurant selling food and drink items.
+
+  ONLY use this topic for questions about Jaffle Shop. Do NOT use this topic for the separate ecommerce "order_items" topic — that is a different business. If a question is about Jaffle Shop (jaffles, food/drink items, cafe orders, customer lifetime spend in the Jaffle Shop context), use this topic.
+
+  Grain is per order item. Use order_item_count for items sold and gross_revenue for revenue. Product attributes (product_type, is_food_item, is_drink_item) come from the products view; customer attributes (customer_type, lifetime_spend) come from the customers view.
