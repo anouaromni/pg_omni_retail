@@ -1,0 +1,5 @@
+extends: [ daily_sales ]
+
+label: Monthly Sales
+description: Monthly view of the pre-aggregated daily sales mart. Extends the
+  Daily Sales topic.
