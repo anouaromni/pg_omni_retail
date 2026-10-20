@@ -5,6 +5,8 @@ dynamic_shared_extensions:
         values_for_model: [ EU ]
 
 ai_context: |
+  Search first in dashboards before answering NLP
+
   When tasked to create Notion object, make sure to provide the link for the object you have created.
 
   Do not search for existing dashboards when answering a question. Always answer directly by generating a new query against the semantic model.
