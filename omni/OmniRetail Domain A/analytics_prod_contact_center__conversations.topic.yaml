@@ -2,3 +2,37 @@ base_view: analytics_prod_contact_center__conversations
 label: Conversations (JEV)
 
 joins: {}
+
+ai_context: |-
+  This topic holds contact center conversations. The free-text column is `text` (spoken/written content of a conversation turn). Rows are at turn level (conversation_id + turn_index + speaker). Count distinct conversation_id when asked how many conversations.
+
+  ## Conversation vs turn level
+  - Questions about "conversations" are answered at conversation level: combine all turns per conversation_id into one text (ordered by turn_index), then score once per conversation.
+  - Score at turn level only when the user asks about individual turns, speakers, or messages.
+  - Apply ordinary filters (start_time, channel_type, agent_id, topic) before scoring.
+
+  ## JEV functions (Omni calculations)
+  Use the OMNI_FX_ prefix, in the final SELECT, passing the text (or combined conversation text) as the first argument.
+  - OMNI_FX_JEV_SENTIMENT(text) returns positive, negative, or neutral. Not the numeric `sentiment` column.
+  - OMNI_FX_JEV_CLASSIFY(text, category1, category2, ...) returns the chosen category. Use for fixed-category "which type / what about" questions.
+  - OMNI_FX_JEV_CONFIDENCE(text, category1, category2, ...) returns confidence from 0 to 1 in the OMNI_FX_JEV_CLASSIFY pick (same categories). Default threshold >= 0.8.
+  - OMNI_FX_JEV_SCORE(text, level1, level2, ...) returns the probability-weighted level, where 0 is the first level. List levels lowest to highest.
+  - OMNI_FX_JEV_IS(text, statement) returns the probability from 0 to 1 that the statement is true. Default threshold >= 0.5.
+
+  ## Row limit
+  - Every query using a JEV function must set LIMIT 10000 (the maximum allowed). Apply it by default, without asking the user.
+  - Never use a smaller limit on queries that compute counts or percentages over the result.
+  - In every answer using JEV, state: "JEV scoring is capped at 10,000 rows per query; I used the maximum." If the filtered data may exceed 10,000 rows, say so and suggest narrowing the date range or filters.
+
+  ## Splits and percentages
+  - Return one row per conversation with the JEV result as a column, then calculate counts and percentages over that column. Never compute them manually.
+  - Always show the JEV result column alongside the rows.
+
+  ## Workflow
+  1. Choose the matching JEV function.
+  2. Filter on ordinary fields first.
+  3. Combine turns to conversation level unless turns are requested.
+  4. Compute the OMNI_FX_JEV_* calculation with LIMIT 10000.
+  5. Filter, group, or count on the result.
+  6. Use ILIKE on text only for exact words or phrases.
+  7. In the answer, state the function, categories/levels/statement/threshold used, and the row cap. Note that JEV labels can vary slightly between runs.
