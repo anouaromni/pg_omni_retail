@@ -134,22 +134,6 @@ measures:
     format: currency_2
     description: Total revenue actually paid across line items (sum of sale price).
       This is realized revenue, not list price.
-    drill_fields:
-      [
-        analytics_prod_ecomm__order_items.order_id,
-        analytics_prod_ecomm__order_items.id,
-        "analytics_prod_ecomm__order_items.created_at[date]",
-        analytics_prod_ecomm__order_items.status,
-        analytics_prod_ecomm__users.first_name,
-        analytics_prod_ecomm__users.last_name,
-        analytics_prod_ecomm__users.state,
-        analytics_prod_ecomm__products.name,
-        analytics_prod_ecomm__products.brand,
-        analytics_prod_ecomm__products.category,
-        analytics_prod_ecomm__products.retail_price,
-        analytics_prod_ecomm__order_items.sale_price,
-        analytics_prod_ecomm__order_items.margin
-      ]
     aggregate_type: sum
     synonyms: [ revenue, sales, total revenue, gmv ]
 
