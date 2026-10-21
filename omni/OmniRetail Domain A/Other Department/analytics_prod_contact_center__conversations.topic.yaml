@@ -1,5 +1,7 @@
 base_view: analytics_prod_contact_center__conversations
 label: Conversations (JEV)
+group_label: Other Department
+display_order: 10
 
 joins: {}
 

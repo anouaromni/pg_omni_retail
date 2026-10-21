@@ -1,4 +1,11 @@
 base_view: analytics_prod_ecomm__order_items
+group_label: Online Sales
+display_order: 1
+description: Line-item level view of Omni Retail orders (one row per item within
+  an order). Use it to analyze revenue, margin, discounts, order volumes,
+  shipping performance and returns, and to slice them by customer (country,
+  traffic source), product (department, category, brand) and time, down to
+  individual transactions.
 
 # Exclude calendar date-part dimensions and the duplicate product_* fields on the inventory_items bridge from AI context.
 ai_fields:

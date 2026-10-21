@@ -1,3 +1,5 @@
+hidden: true
+
 base_view: omni_dbt__ledger_demo_test_results
 label: Ledger Newsletter
 description: dbt test results for the ledger demo — one row per test evaluation,
