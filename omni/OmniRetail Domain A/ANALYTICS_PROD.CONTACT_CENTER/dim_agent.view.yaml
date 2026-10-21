@@ -1,0 +1,47 @@
+# Reference this view as analytics_prod_contact_center__dim_agent
+catalog: ANALYTICS_PROD
+schema: CONTACT_CENTER
+table_name: DIM_AGENT
+
+dimensions:
+  agent_id:
+    sql: '"AGENT_ID"'
+    format: ID
+    primary_key: true
+
+  first_name:
+    sql: '"FIRST_NAME"'
+
+  last_name:
+    sql: '"LAST_NAME"'
+
+  email:
+    sql: '"EMAIL"'
+
+  team:
+    sql: '"TEAM"'
+
+  level:
+    sql: '"LEVEL"'
+
+  tenure_months:
+    sql: '"TENURE_MONTHS"'
+
+  country:
+    sql: '"COUNTRY"'
+
+  state:
+    sql: '"STATE"'
+
+  city:
+    sql: '"CITY"'
+
+  zip:
+    sql: '"ZIP"'
+
+  address:
+    sql: '"ADDRESS"'
+
+measures:
+  count:
+    aggregate_type: count

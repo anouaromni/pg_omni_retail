@@ -1,0 +1,31 @@
+# Reference this view as analytics_prod_contact_center__spike_state
+catalog: ANALYTICS_PROD
+schema: CONTACT_CENTER
+table_name: SPIKE_STATE
+
+dimensions:
+  active_dc_id:
+    sql: '"ACTIVE_DC_ID"'
+    format: ID
+
+  active_dc_name:
+    sql: '"ACTIVE_DC_NAME"'
+
+  active_topic:
+    sql: '"ACTIVE_TOPIC"'
+
+  active_agent_level:
+    sql: '"ACTIVE_AGENT_LEVEL"'
+
+  started_at:
+    sql: '"STARTED_AT"'
+
+  cooldown_until:
+    sql: '"COOLDOWN_UNTIL"'
+
+  history:
+    sql: '"HISTORY"'
+
+measures:
+  count:
+    aggregate_type: count

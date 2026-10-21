@@ -1,0 +1,18 @@
+# Reference this view as analytics_prod_contact_center__pipeline_state
+catalog: ANALYTICS_PROD
+schema: CONTACT_CENTER
+table_name: PIPELINE_STATE
+
+dimensions:
+  last_order_watermark:
+    sql: '"LAST_ORDER_WATERMARK"'
+
+  last_run_at:
+    sql: '"LAST_RUN_AT"'
+
+  prev_order_watermark:
+    sql: '"PREV_ORDER_WATERMARK"'
+
+measures:
+  count:
+    aggregate_type: count

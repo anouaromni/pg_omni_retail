@@ -1,0 +1,59 @@
+# Reference this view as analytics_prod_contact_center__conversations
+catalog: ANALYTICS_PROD
+schema: CONTACT_CENTER
+table_name: CONVERSATIONS
+
+dimensions:
+  conversation_id:
+    sql: '"CONVERSATION_ID"'
+    format: ID
+
+  order_id:
+    sql: '"ORDER_ID"'
+    format: ID
+
+  user_id:
+    sql: '"USER_ID"'
+    format: ID
+
+  agent_id:
+    sql: '"AGENT_ID"'
+    format: ID
+
+  dc_id:
+    sql: '"DC_ID"'
+    format: ID
+
+  channel_type:
+    sql: '"CHANNEL_TYPE"'
+
+  topic:
+    sql: '"TOPIC"'
+
+  start_time:
+    sql: '"START_TIME"'
+
+  turn_index:
+    sql: '"TURN_INDEX"'
+
+  speaker:
+    sql: '"SPEAKER"'
+
+  text:
+    sql: '"TEXT"'
+
+  sentiment:
+    sql: '"SENTIMENT"'
+
+  turn_timestamp:
+    sql: '"TURN_TIMESTAMP"'
+
+  conversation_duration_seconds:
+    sql: '"CONVERSATION_DURATION_SECONDS"'
+
+  csat_score:
+    sql: '"CSAT_SCORE"'
+
+measures:
+  count:
+    aggregate_type: count
