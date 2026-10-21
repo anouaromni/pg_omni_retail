@@ -1,0 +1,4 @@
+base_view: analytics_prod_demo__zendesk_tickets
+label: Zendesk Tickets
+
+joins: {}
