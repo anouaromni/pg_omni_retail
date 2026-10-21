@@ -1,5 +1,7 @@
 base_view: omni_dbt__order_items
 label: Jaffle
+group_label: Marketing
+display_order: 20
 description: Jaffle Shop order line items joined to customers and products. One
   row per order item.
 

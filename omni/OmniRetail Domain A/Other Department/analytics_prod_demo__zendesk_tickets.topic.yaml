@@ -1,4 +1,6 @@
 base_view: analytics_prod_demo__zendesk_tickets
 label: Zendesk Tickets
+group_label: Other Department
+display_order: 11
 
 joins: {}
