@@ -39,7 +39,7 @@ views:
     measures:
       total_list_price:
         sql: ${analytics_prod_ecomm__products.retail_price}
-        label: Total List Price
+        label: Total List Price (EU)
         format: currency_2
         description: Total product list (retail) price across line items, before discount.
         aggregate_type: sum
@@ -143,6 +143,31 @@ ai_context: |-
   propose a visualization of the result. For multi-step analyses (several
   dependent queries), a visualization is not required.
 
+sample_queries:
+  Monthly KPI Trends:
+    query:
+      fields:
+        [
+          "analytics_prod_ecomm__order_items.created_at[month]",
+          analytics_prod_ecomm__order_items.total_sale_price,
+          analytics_prod_ecomm__order_items.order_count,
+          analytics_prod_ecomm__order_items.total_margin,
+          analytics_prod_ecomm__order_items.discount_rate,
+          analytics_prod_ecomm__order_items.avg_days_to_ship
+        ]
+      base_view: analytics_prod_ecomm__order_items
+      filters:
+        analytics_prod_ecomm__order_items.status:
+          not: Cancelled
+        analytics_prod_ecomm__order_items.created_at:
+          time_for_duration: [ 24 months ago, 24 months ]
+      limit: 1000
+      sorts:
+        - field: analytics_prod_ecomm__order_items.created_at[month]
+      topic: order_items
+    description: Monthly revenue, orders, margin, discount rate and average days to
+      ship for the last 24 months, excluding cancelled items.
+    prompt: Show me monthly KPI trends for the last 24 months
 skills:
   monday_morning_tradepack:
     label: Run my Monday Trading Review
