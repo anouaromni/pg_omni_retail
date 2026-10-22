@@ -13,6 +13,10 @@ ai_context: |
 
   For any Sales or Retail question, always use the Order Items topic.
 
+ai_settings:
+  allow_custom_fields: never
+  allow_ctes: never
+
 # Extending the Shared Model Definitions.
 extends: [ OmniRetail Hub ]
 
