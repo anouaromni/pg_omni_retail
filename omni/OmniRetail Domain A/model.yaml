@@ -16,5 +16,10 @@ ai_context: |
 # Extending the Shared Model Definitions.
 extends: [ OmniRetail Hub ]
 
+access_grants:
+  can_see_finance_data:
+    user_attribute: can_see_finance_data
+    allowed_values: [ "true" ]
+
 # Exclude the Jaffle and Ledger Newsletter topics from the AI agent, dashboard assistant, and embedded chat
 ai_chat_topics: [ -ledger_demo_test_results, all_topics, -jaffle ]
