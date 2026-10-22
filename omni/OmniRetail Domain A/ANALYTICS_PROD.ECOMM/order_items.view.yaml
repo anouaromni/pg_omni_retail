@@ -70,6 +70,7 @@ dimensions:
     format: currency_2
     description: Per-line-item profit (sale price minus cost). Sum with the Total
       Margin measure for aggregate profit; this raw field is per-item.
+    required_access_grants: [ can_see_finance_data ]
 
   months_since_signup:
     sql: '"MONTHS_SINCE_SIGNUP"'
@@ -169,6 +170,7 @@ measures:
     description: Total profit across line items (sum of per-line-item margin = sale
       price minus cost).
     aggregate_type: sum
+    required_access_grants: [ can_see_finance_data ]
     synonyms: [ profit, gross profit, margin dollars ]
 
   count_id:
