@@ -18,6 +18,7 @@ dimensions:
   category:
     sql: '"CATEGORY"'
     label: Category
+    drill_fields: [ analytics_prod_ecomm__products.brand ]
     sample_values:
       [
         Accessories,
@@ -51,6 +52,7 @@ dimensions:
   department:
     sql: '"DEPARTMENT"'
     label: Department
+    drill_fields: [ analytics_prod_ecomm__products.category ]
     sample_values: [ Men, Women ]
 
   sku:
