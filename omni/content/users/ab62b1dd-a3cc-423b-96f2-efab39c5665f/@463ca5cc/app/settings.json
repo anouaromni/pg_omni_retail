@@ -1,0 +1,20 @@
+{
+  "allowClipboard": false,
+  "allowDefaultMapProviders": false,
+  "allowDownloads": false,
+  "allowExternalNavigation": false,
+  "allowFullscreen": false,
+  "allowInternalNavigation": false,
+  "allowLocalNetwork": false,
+  "allowModals": false,
+  "externalNavOpensInNewTab": true,
+  "frameDomains": [
+  ],
+  "frameDomainsEnabled": false,
+  "navAllowedDomains": [
+  ],
+  "navAllowedDomainsEnabled": false,
+  "safeDomains": [
+  ],
+  "safeDomainsEnabled": false
+}

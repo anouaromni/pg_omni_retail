@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Hello World</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root { --app-font: 'Public Sans', system-ui, sans-serif; }
+  body { margin: 0; padding: 32px; font-family: var(--app-font); color: var(--color-text4); background: color-mix(in srgb, var(--color-text4) 1.5%, var(--color-background)); }
+  body.prefers-dark { background: var(--color-background); }
+  h1 { font-size: 24px; font-weight: 500; margin: 0; line-height: 1.25; }
+  .sub { font-size: 14px; color: var(--color-text2); margin: 6px 0 16px; }
+  .card { background: var(--color-surface); border: 1px solid var(--color-border1); border-radius: 8px; padding: 20px; }
+  .card p { margin: 0; font-size: 16px; line-height: 1.5; }
+  .weather { margin-top: 16px; }
+  .weather h2 { font-size: 16px; font-weight: 500; margin: 0; }
+  .weather .wsub { font-size: 12px; color: var(--color-text2); margin: 4px 0 16px; }
+  .wform { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+  .wform label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--color-text2); }
+  .wform input, .wform select { height: 32px; padding: 0 10px; font-family: var(--app-font); font-size: 13px; color: var(--color-text4); background: var(--color-surface); border: 1px solid var(--color-border2); border-radius: 6px; box-sizing: border-box; }
+  .wform input:focus, .wform select:focus { outline: 2px solid var(--color-chart-1); outline-offset: 0; }
+  .wout { font-size: 28px; font-weight: 600; line-height: 1.25; }
+  .wout span { font-size: 14px; font-weight: 400; color: var(--color-text2); margin-left: 8px; }
+</style>
+</head>
+<body>
+  <h1>Hello World</h1>
+  <div class="sub" id="sub">Welcome to your first app.</div>
+  <div class="card"><p id="greeting">Hello, world!</p></div>
+  <div class="card weather">
+    <h2>Today's weather</h2>
+    <div class="wsub" id="wsub">Enter today's conditions.</div>
+    <div class="wform">
+      <label>City<input id="wcity" type="text" placeholder="e.g. Paris"></label>
+      <label>Temperature<input id="wtemp" type="number" placeholder="e.g. 18" style="width:100px"></label>
+      <label>Unit<select id="wunit"><option value="C">°C</option><option value="F">°F</option></select></label>
+      <label>Conditions<select id="wcond"><option>Sunny</option><option>Partly cloudy</option><option>Cloudy</option><option>Rain</option><option>Storm</option><option>Snow</option><option>Windy</option><option>Fog</option></select></label>
+    </div>
+    <div class="wout" id="wout">—</div>
+  </div>
+  <script>
+    omni.ready.then(() => {
+      const name = omni.currentUser && omni.currentUser.name;
+      const el = document.getElementById('greeting');
+      if (name) el.textContent = 'Hello, ' + name + '!';
+      console.assert(el.textContent, '[omni-debug] greeting rendered');
+
+      const city = document.getElementById('wcity');
+      const temp = document.getElementById('wtemp');
+      const unit = document.getElementById('wunit');
+      const cond = document.getElementById('wcond');
+      const out = document.getElementById('wout');
+      const wsub = document.getElementById('wsub');
+      const renderWeather = () => {
+        if (temp.value === '') { out.textContent = '—'; wsub.textContent = 'Enter today\'s conditions.'; return; }
+        out.textContent = '';
+        out.append(temp.value + '°' + unit.value);
+        const s = document.createElement('span');
+        s.textContent = cond.value;
+        out.appendChild(s);
+        wsub.textContent = city.value ? city.value + ', today' : 'Today';
+      };
+      [city, temp, unit, cond].forEach((c) => c.addEventListener('input', renderWeather));
+      renderWeather();
+      console.assert(out.textContent, '[omni-debug] weather card rendered');
+    });
+  </script>
+</body>
+</html>

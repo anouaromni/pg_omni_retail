@@ -1,0 +1,86 @@
+{
+  "app": {
+    "url": "/api/v2/documents/463ca5cc/app"
+  },
+  "description": "A minimal hello world app that greets the viewer by name.",
+  "modelId": "09472205-1842-42c1-a57d-e27aa798066d",
+  "name": "Hello World",
+  "queryPresentations": {
+    "data": {
+      "1": {
+        "aiConfig": null,
+        "automaticVis": false,
+        "description": null,
+        "filterOrder": [
+        ],
+        "isSql": false,
+        "name": "⚡️🍣 Query",
+        "prefersChart": false,
+        "query": {
+          "calculations": [
+          ],
+          "column_limit": 50,
+          "column_totals": {
+          },
+          "controls": [
+          ],
+          "custom_summary_types": {
+          },
+          "dbtMode": false,
+          "default_group_by": true,
+          "dimensionIndex": 0,
+          "fields": [
+          ],
+          "fill_fields": [
+          ],
+          "filters": {
+          },
+          "join_via_map": {
+          },
+          "limit": 1000,
+          "pivots": [
+          ],
+          "rewriteSql": true,
+          "row_totals": {
+          },
+          "sorts": [
+          ],
+          "table": "",
+          "userEditedSQL": "",
+          "version": 9
+        },
+        "resultConfig": {
+          "expandedRows": {
+          },
+          "hideIndexColumn": false,
+          "rowBanding": {
+            "bandSize": 1,
+            "enabled": false
+          },
+          "showDescriptions": true,
+          "tableType": "spreadsheet",
+          "truncateHeaders": true,
+          "visColumnDisplay": "hide-view-name"
+        },
+        "sourceQueryPresentationKey": null,
+        "subTitle": null,
+        "topicName": null,
+        "type": "query",
+        "visConfig": {
+          "chartType": null,
+          "fields": [
+          ],
+          "version": 0,
+          "visConfig": {
+            "config": {
+            },
+            "visType": null
+          }
+        }
+      }
+    },
+    "order": [
+      "1"
+    ]
+  }
+}
