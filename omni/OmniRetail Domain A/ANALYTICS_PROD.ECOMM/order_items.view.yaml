@@ -193,3 +193,14 @@ measures:
       ${analytics_prod_ecomm__order_items.count} END
     label: Return Rate
     format: PERCENT_2
+
+  total_sale_price_excl_cancelled:
+    sql: ${sale_price}
+    label: Revenue excl. Cancelled
+    format: currency_2
+    description: Total sale price across line items, excluding Cancelled items
+      (never collected payment). Use for realized revenue.
+    aggregate_type: sum
+    filters:
+      status:
+        not: Cancelled
