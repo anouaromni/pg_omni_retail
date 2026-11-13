@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Design system CSS (/base.css) and theme overrides (/custom-theme.css) are auto-injected -->
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      margin: 0;
+      padding: var(--size4);
+      color: var(--color-text);
+      background: var(--page-background);
+    }
+  </style>
+</head>
+<body>
+  <h1 id="hello">Hello world</h1>
+  <ul id="langs">
+    <li><strong>English:</strong> Hello world</li>
+    <li><strong>French:</strong> Bonjour le monde</li>
+    <li><strong>Spanish:</strong> Hola mundo</li>
+  </ul>
+  <div id="app"></div>
+  <script>
+    console.assert(document.querySelectorAll('#langs li').length === 3, '[omni-debug] 3 languages rendered')
+    omni.ready.then(() => {
+      const app = document.getElementById('app')
+      // omni.queries lists all query names in the workbook
+      if (!omni.queries.length) {
+        app.textContent = 'No queries available.'
+        return
+      }
+      // Request the first query to run
+      const queryName = omni.queries[0]
+      omni.runQueries([queryName])
+      // Listen for data
+      omni.query(queryName).onData((result) => {
+        if (!result.rows.length) {
+          app.textContent = 'No rows yet.'
+          return
+        }
+        const table = document.createElement('table')
+        const header = table.createTHead().insertRow()
+        result.columns.forEach((col) => {
+          header.insertCell().textContent = col.label
+        })
+        const body = table.createTBody()
+        // formattedRows pairs with rows and holds each cell as the workbook
+        // renders it — currency, percent, date grain. Read rows for math.
+        result.formattedRows.forEach((formatted) => {
+          const tr = body.insertRow()
+          result.columns.forEach((col) => {
+            tr.insertCell().textContent = formatted[col.name]
+          })
+        })
+        app.innerHTML = ''
+        app.appendChild(table)
+      })
+    })
+  </script>
+</body>
+</html>
