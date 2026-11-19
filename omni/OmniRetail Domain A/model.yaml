@@ -20,6 +20,8 @@ ai_settings:
 # Extending the Shared Model Definitions.
 extends: [ OmniRetail Hub ]
 
+week_start_day: Sunday
+
 access_grants:
   can_see_finance_data:
     user_attribute: can_see_finance_data
