@@ -14,9 +14,11 @@
 </head>
 <body>
   <h1 id="hello">Hello world</h1>
+  <p id="weather">Today's weather in Dublin: 18°C</p>
   <div id="app"></div>
   <script>
     console.assert(document.getElementById('hello').textContent === 'Hello world', '[omni-debug] hello rendered')
+    console.assert(document.getElementById('weather').textContent.includes('18°C'), '[omni-debug] weather rendered')
     omni.ready.then(() => {
       const app = document.getElementById('app')
       // omni.queries lists all query names in the workbook
