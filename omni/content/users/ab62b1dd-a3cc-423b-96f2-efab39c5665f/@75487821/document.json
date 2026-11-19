@@ -1,0 +1,87 @@
+{
+  "abilities": {
+    "canAnalyze": true,
+    "canDownload": true,
+    "canDrill": true,
+    "canDuplicate": true,
+    "canRequestAccess": true,
+    "canSaveSpreadsheets": true,
+    "canSchedule": true,
+    "canUpload": true,
+    "canUseDashboardAi": true,
+    "canUseTimezoneOverride": false,
+    "canViewWorkbook": false,
+    "requirePullRequestToPublish": true
+  },
+  "app": {
+    "url": "/api/v2/documents/75487821/app"
+  },
+  "description": "A simple Hello World starter app that greets the viewer.",
+  "modelId": "09472205-1842-42c1-a57d-e27aa798066d",
+  "name": "Hello World",
+  "queryPresentations": {
+    "data": {
+      "1": {
+        "aiConfig": null,
+        "automaticVis": false,
+        "description": null,
+        "filterOrder": [
+        ],
+        "isSql": false,
+        "name": "⚡️🍣 Query",
+        "prefersChart": false,
+        "query": {
+          "calculations": [
+          ],
+          "column_limit": 50,
+          "column_totals": {
+          },
+          "custom_summary_types": {
+          },
+          "dbtMode": false,
+          "default_group_by": true,
+          "dimensionIndex": 0,
+          "fields": [
+          ],
+          "fill_fields": [
+          ],
+          "filters": {
+          },
+          "join_via_map": {
+          },
+          "limit": 1000,
+          "pivots": [
+          ],
+          "rewriteSql": true,
+          "row_totals": {
+          },
+          "sorts": [
+          ],
+          "table": "",
+          "userEditedSQL": "",
+          "version": 9
+        },
+        "resultConfig": {
+        },
+        "sourceQueryPresentationKey": null,
+        "subTitle": null,
+        "topicName": null,
+        "type": "query",
+        "visConfig": {
+          "chartType": null,
+          "fields": [
+          ],
+          "version": 0,
+          "visConfig": {
+            "config": {
+            },
+            "visType": null
+          }
+        }
+      }
+    },
+    "order": [
+      "1"
+    ]
+  }
+}

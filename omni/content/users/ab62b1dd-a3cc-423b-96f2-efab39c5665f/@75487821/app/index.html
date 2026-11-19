@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Hello World</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root { --app-font: 'Public Sans', system-ui, sans-serif; }
+  body { margin: 0; padding: 32px; font-family: var(--app-font); color: var(--color-text4); background: color-mix(in srgb, var(--color-text4) 1.5%, var(--color-background)); line-height: 1.4; }
+  body.prefers-dark { background: var(--color-background); }
+  h1 { margin: 0; font-size: 24px; font-weight: 500; line-height: 1.25; }
+  .subtitle { margin-top: 6px; font-size: 14px; color: var(--color-text2); }
+  .card { margin-top: 24px; max-width: 480px; background: var(--color-surface); border: 1px solid var(--color-border1); border-radius: 8px; padding: 20px; }
+  .card h2 { margin: 0; font-size: 16px; font-weight: 500; }
+  .card p { margin: 4px 0 16px; font-size: 12px; color: var(--color-text2); }
+  button { font-family: var(--app-font); font-size: 13px; height: 32px; padding: 0 14px; border-radius: 6px; border: none; color: #fff; cursor: pointer;
+    background: color-mix(in oklch, var(--color-chart-1), black 30%);
+    background: oklch(from var(--color-chart-1) min(l, 0.5) c h); }
+  button:focus-visible { outline: 2px solid var(--color-chart-1); outline-offset: 2px; }
+  #greeting { font-size: 28px; font-weight: 600; margin-bottom: 16px; line-height: 1.25; }
+</style>
+</head>
+<body>
+  <h1>Hello World</h1>
+  <div class="subtitle" id="subtitle">Your first Omni app is up and running.</div>
+  <div class="card">
+    <h2>Greeting</h2>
+    <p>A simple starting point you can build on.</p>
+    <div id="greeting">Hello, World!</div>
+    <button id="btn" type="button">Say hello again</button>
+  </div>
+<script>
+  const greetings = ['Hello, World!', 'Bonjour, le monde !', 'Hola, Mundo!', 'Hallo, Welt!', 'Ciao, Mondo!'];
+  let i = 0;
+  let name = 'World';
+  const out = document.getElementById('greeting');
+  document.getElementById('btn').addEventListener('click', () => {
+    i = (i + 1) % greetings.length;
+    out.textContent = greetings[i];
+  });
+  omni.ready.then(() => {
+    const u = omni.currentUser;
+    if (u && u.name) {
+      name = u.name;
+      document.getElementById('subtitle').textContent = 'Welcome, ' + name + '. Your first Omni app is up and running.';
+    }
+  });
+</script>
+</body>
+</html>

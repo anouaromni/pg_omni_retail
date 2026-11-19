@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Hello World</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root { --app-font: 'Public Sans', system-ui, sans-serif; }
+  body { margin: 0; padding: 32px; font-family: var(--app-font); color: var(--color-text4); background: color-mix(in srgb, var(--color-text4) 1.5%, var(--color-background)); }
+  body.prefers-dark { background: var(--color-background); }
+  h1 { font-size: 24px; font-weight: 500; margin: 0; line-height: 1.25; }
+  .sub { font-size: 14px; color: var(--color-text2); margin: 6px 0 16px; }
+  .card { background: var(--color-surface); border: 1px solid var(--color-border1); border-radius: 8px; padding: 20px; }
+  .card p { margin: 0; font-size: 16px; line-height: 1.5; }
+</style>
+</head>
+<body>
+  <h1>Hello World</h1>
+  <div class="sub" id="sub">Welcome to your first app.</div>
+  <div class="card"><p id="greeting">Hello, world!</p></div>
+  <script>
+    omni.ready.then(() => {
+      const name = omni.currentUser && omni.currentUser.name;
+      const el = document.getElementById('greeting');
+      if (name) el.textContent = 'Hello, ' + name + '!';
+      console.assert(el.textContent, '[omni-debug] greeting rendered');
+    });
+  </script>
+</body>
+</html>
