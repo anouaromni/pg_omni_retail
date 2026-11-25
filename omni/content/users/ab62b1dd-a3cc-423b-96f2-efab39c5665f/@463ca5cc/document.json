@@ -11,6 +11,7 @@
     "canUseDashboardAi": true,
     "canUseTimezoneOverride": false,
     "canViewWorkbook": false,
+    "gitMode": "REQUIRE_PULL_REQUEST",
     "requirePullRequestToPublish": true
   },
   "app": {
